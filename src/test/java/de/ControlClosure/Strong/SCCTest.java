@@ -1,0 +1,54 @@
+package de.ControlClosure.Strong;
+
+import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
+import de.ControlClosure.DSCC.TarjanDSCC;
+import de.ControlClosure.Graph;
+import de.ControlClosure.Vertex;
+import org.junit.jupiter.api.Test;
+
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class SCCTest {
+    private static  final StrongControlClosure[] SCC = {
+            new SCCCubic(),
+            new SCCDecrementalSCC(new TarjanDSCC()),
+            new SCCDecrementalSCC(new PolylogDSCC()),
+    };
+
+    @Test
+    public void test(){
+        for (StrongControlClosure scc : SCC) {
+            System.out.println("Running Implementation: " + scc.getClass().getSimpleName());
+            for (int j = 0; j < ExampleGraphs.graphs.length; j++) {
+                Graph<Vertex> G = ExampleGraphs.graphs[j];
+                Set<Vertex> Vp = ExampleGraphs.startVertices(j);
+                Set<Vertex> P = ExampleGraphs.predicateVertices(j);
+
+                Set<Vertex> result = scc.scc(G, Vp, P);
+                assertEquals(ExampleGraphs.expected(j), result);
+            }
+        }
+    }
+
+    private static  final StrongControlClosureNoPredicate[] SCC_NP = {
+            new SCCNoPredicateDecrementalSCC(new TarjanDSCC()),
+            new SCCNoPredicateDecrementalSCC(new PolylogDSCC()),
+    };
+
+    @Test
+    public void testNoPredicate() {
+        for (StrongControlClosureNoPredicate scc : SCC_NP) {
+            System.out.println("Running Implementation: " + scc.getClass().getSimpleName());
+            for (int j = 0; j < ExampleGraphs.graphs.length; j++) {
+                Graph<Vertex> G = ExampleGraphs.graphs[j];
+                Set<Vertex> Vp = ExampleGraphs.startVertices(j);
+                Set<Vertex> F = ExampleGraphs.finalVertices(j);
+
+                Set<Vertex> result = scc.scc(G, Vp, F);
+                assertEquals(ExampleGraphs.expected(j), result);
+            }
+        }
+    }
+}
