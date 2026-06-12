@@ -1,10 +1,11 @@
 package de.ControlClosure.Weak;
 
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
-import de.ControlClosure.DSCC.DecrementalSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,6 +18,14 @@ public class Main {
             case "polylog" -> {wcc = new WCCDecrementalSCC(new PolylogDSCC());}
             default -> throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] !");
         }
-        System.out.println(wcc.getClass() + " File: " + args[1]);
+
+        Path filePath = Path.of(args[1]);
+        String content;
+        try {
+            content = Files.readString(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(wcc.getClass() + " Content: " + content);
     }
 }
