@@ -37,12 +37,12 @@ public class WCCTest {
     @Test
     public void testQuadraticTime(){
         assert false; // Test if Assertions are disabled
-        Tuple<Graph<Vertex>,Set<Vertex>> res = GraphUtils.makeQuadraticDSCCGraph(100);
+        Tuple<Graph<Vertex>,Set<Vertex>> res = GraphGenerator.makeQuadraticDSCCGraph(100);
 
         Graph<Vertex> G = res.first;
         Set<Vertex> Vp = res.second;
 
-        Set<Vertex> result = new WCCDecrementalSCC(new PolylogDSCC()).wcc(G,Vp);
+        Set<Vertex> result = new WCCDecrementalSCC(new TarjanDSCC()).wcc(G,Vp);
         assertEquals(G.vertices(), result);
     }
 }

@@ -196,20 +196,56 @@ public class GraphUtils {
         return true;
     }
 
-    public static Tuple<Graph<Vertex>, Set<Vertex>> makeQuadraticDSCCGraph(int k) {
-        Vertex[] V = new Vertex[2 * k];
-        for(int i = 0; i < 2*k; i++) {
+    public static Tuple<Graph<Vertex>, Set<Vertex>> parseWCCInstance(String instance) {
+        Map<Vertex, List<Vertex>> G = new HashMap<>();
+        Set<Vertex> Vprime = new HashSet<>();
+
+        String[] lines = instance.split(System.lineSeparator());
+
+        int numVertices = 0;
+        for(String line: lines) {
+            line.trim();
+            if (!line.startsWith("V':")) {
+                numVertices++;
+            }
+        }
+
+        Vertex[] V = new Vertex[numVertices];
+        for(int i = 0; i < numVertices; i++) {
             V[i] = new Vertex();
         }
 
-        Map<Vertex, List<Vertex>> G = new HashMap<>();
-        for(int i = 0; i < 2*(k-1); i+=2) {
-            G.put(V[i], List.of(V[1], V[i+2]));
-            G.put(V[i+1], List.of(V[i], V[i+3]));
-        }
-        G.put(V[2*k-2],List.of(V[1]));
-        G.put(V[2*k-1],List.of(V[2*k-2]));
+        for(String line: lines) {
+            if (!line.startsWith("V':")) {
+                String[] split = line.split(":",2);
+                String vertexId = split[0];
+                String adjacencyString = split[1];
 
-        return new Tuple<>(new Graph<>(G), new HashSet<>(List.of(V[2*k-2],V[2*k-1])));
+                String[] vertex = adjacencyString.split(",");
+
+                List<Vertex> adjacencyList = new ArrayList<>();
+                for(String v: vertex) {
+                    if (!v.isBlank()) {
+                        adjacencyList.add(V[Integer.parseInt(v.trim())]);
+                    }
+                }
+
+                int vertexIndex = Integer.parseInt(vertexId.trim());
+                G.put(V[vertexIndex], adjacencyList);
+            }
+
+            if (line.startsWith("V':")) {
+                String VprimeString = line.split(":",2)[1];
+                String[] vertex = VprimeString.split(",");
+
+                for(String v: vertex) {
+                    if (!v.isBlank()) {
+                        Vprime.add(V[Integer.parseInt(v.trim())]);
+                    }
+                }
+            }
+        }
+
+        return new Tuple<>(new Graph<>(G), Vprime);
     }
 }

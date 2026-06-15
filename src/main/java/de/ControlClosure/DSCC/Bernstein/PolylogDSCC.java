@@ -41,22 +41,6 @@ public class PolylogDSCC implements DecrementalSCC {
         assert GraphUtils.areSCCs(sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>());
     }
 
-    public void printState(boolean f) {
-        System.out.println("State ++++++++++++++++++++++");
-        System.out.println("   SCCS " + sccs);
-        for(int i = 0; i < 1; i++) {
-            System.out.println("    ----------------");
-            System.out.println("    G" + i + ": " + graphs.get(i));
-            System.out.println("    S" + i + ": " + separators.get(i));
-            if (f) {
-                for(Node n: graphs.get(i).vertices()) {
-                    System.out.println("       GES: " + n + " " + gesTreeM.get(n));
-                }
-            }
-        }
-        System.out.println("State -------------------------");
-    }
-
     private void preprocessing(double delta) {
         for(int i = 0; i <= alpha; i++) {
             vertexNodeMaps.add(new HashMap<>());
@@ -89,29 +73,21 @@ public class PolylogDSCC implements DecrementalSCC {
             Map<Vertex, Node> SCCip1 = vertexNodeMaps.get(i+1);
 
             for(Set<Node> scc: P) {
-//                Node nodeForSCC;
-//                if (scc.size() == 1) {
-//                    nodeForSCC = scc.stream().findFirst().get();
-//                } else {
-//                    Set<Vertex> vertexSet = new LinkedHashSet<>();
-//                    // merge vertices of all nodes to single node
-//                    for(Node n: scc) {
-//                        vertexSet.addAll(n.vertices());
-//                    }
-//                    nodeForSCC = new Node(vertexSet);
-//                }
                 Set<Vertex> vertexSet = new LinkedHashSet<>();
                 // merge vertices of all nodes to single node
                 for(Node n: scc) {
                     vertexSet.addAll(n.vertices());
                 }
+
                 Node nodeForSCC = new Node(vertexSet);
                 for(Vertex v: nodeForSCC.vertices()) {
                     SCCip1.put(v, nodeForSCC);
                 }
 
-                // TODO: pickRandom picks random vertex first and then node for that vertex
-                GESTree<Node> gesTree = new GESTree<>(SetUtils.pickRandom(scc), Gi.induced(scc), Si, delta);
+                Vertex r = SetUtils.pickRandom(vertexSet);
+                Node R = vertexNodeMaps.get(i).get(r);
+
+                GESTree<Node> gesTree = new GESTree<>(R, Gi.induced(scc), Si, delta);
                 gesTreeM.put(nodeForSCC, gesTree);
             }
             CondensationGraph Gip1 = new CondensationGraph(G, SCCip1);
@@ -131,8 +107,6 @@ public class PolylogDSCC implements DecrementalSCC {
         List<Set<T>> P = new ArrayList<>();
         Graph<T> GPrime = G.clone();
 
-//        System.out.println("        Before: " + G);
-
         while (!GPrime.isEmpty()) {
             T r = SetUtils.pickRandom(GPrime.vertices());
 
@@ -147,7 +121,6 @@ public class PolylogDSCC implements DecrementalSCC {
             }
 
             if (separatorParallelResult.second.size() <= 2.0f/3.0f * G.size()){
-//                System.out.println("Early Recursion " + separatorParallelResult.second.size() + " " + G.size());
                 Tuple<Set<T>, List<Set<T>>> splitRecursion = split(
                         GPrime.induced(separatorParallelResult.second),
                         SetUtils.intersection(S, separatorParallelResult.second),
@@ -166,13 +139,10 @@ public class PolylogDSCC implements DecrementalSCC {
                 remaining.removeAll(separatorParallelResult.second);
                 GPrime = GPrime.induced(remaining);
             } else {
-//            if (true) {
                 GESTree<T> E = new GESTree<>(r, GPrime, S, d / 2.0);
-                //            System.out.println("E: " + E + " S: " + S + " G': " + GPrime);
 
                 while (E.hasUnreachable()) {
                     T v = E.getUnreachable();
-                    //                System.out.println("    Unreachable: " + v);
 
                     Tuple<Set<T>, Set<T>> separatorResult;
                     if (E.dist(r, v) > d / 2.0) {
@@ -182,8 +152,6 @@ public class PolylogDSCC implements DecrementalSCC {
                     }
                     Set<T> SSep = separatorResult.first;
                     Set<T> VSep = separatorResult.second;
-                    //                System.out.println("    SSEP: " + SSep);
-                    //                System.out.println("    VSEP: " + VSep);
 
                     assert !VSep.contains(r);
                     assert VSep.contains(v);
@@ -194,23 +162,17 @@ public class PolylogDSCC implements DecrementalSCC {
 
                     SSplit.addAll(SSep);
                     for (T separator : SSep) {
-                        //                    System.out.println("Added to P " + SSep);
                         P.add(new LinkedHashSet<>(List.of(separator)));
                     }
 
-                    //                System.out.println("    Induced " + G.induced(VSep));
-                    //                System.out.println("    Induced From " + G);
                     Tuple<Set<T>, List<Set<T>>> splitRecursion
                             = split(G.induced(VSep), SetUtils.intersection(S, VSep), d);
 
                     SSplit.addAll(splitRecursion.first);
                     P.addAll(splitRecursion.second);
                 }
-                //            System.out.println("Added to P from GESTree " + E.getAll());
                 P.add(E.getAll());
                 GPrime = new Graph<>();
-                //}
-                assert !GPrime.vertices().contains(r);
             }
         }
         assert GraphUtils.areSCCs(P, G, SSplit);
@@ -272,7 +234,6 @@ public class PolylogDSCC implements DecrementalSCC {
                         .sum();
 
                 if (vertsInVSep <= 2.0f/3.0f * X.size()) {
-                //if (true) {
                     E.delete(SSep);
                     E.delete(VSep);
 
@@ -312,8 +273,10 @@ public class PolylogDSCC implements DecrementalSCC {
 
                     Node Zprime = splitNode(i+1,Z, u,v);
 
+                    Vertex r = SetUtils.pickRandom(vertexSet);
+                    Node R = SCCi.get(r);
                     GESTree<Node> gesTree = new GESTree<>(
-                            SetUtils.pickRandom(scc),
+                            R,
                             graphs.get(i).induced(scc),
                             separators.get(i),
                             delta);
@@ -339,7 +302,7 @@ public class PolylogDSCC implements DecrementalSCC {
 
             assert mappingsCorrect(i+1);
         }
-        // In G_\alpha, the edge was not yet deleted
+        // In G_alpha, the edge was not yet deleted
         Map<Vertex, Node> SCCalpha = vertexNodeMaps.get(alpha);
         graphs.get(alpha).delete(SCCalpha.get(u),SCCalpha.get(v));
 
@@ -440,20 +403,10 @@ public class PolylogDSCC implements DecrementalSCC {
                     }
                 }
 
-//
-//                Eip2.shortestPathOutTreeChildren.put(Z, new ArrayList<>());
-//                Eip2.shortestPathInTreeChildren.put(Z, new ArrayList<>());
-//
-//                Eip2.outDist.put(Z, Eip2.lOut(Y));
-//                Eip2.inDist.put(Z, Eip2.lIn(Y));
-
 
                 if(Eip2.lOut(Y) == INFINITY) { // Y was already disconnected in T_Out
                     Eip2.unreachableVerticesOutTree.add(Z);
                 } else {
-                    // No disconnect, just fix
-//                    Eip2.disconnectOut(Y);
-//                    Eip2.disconnectOut(Z);
                     if (Eip2.shortestPathOutTreeParents.get(Y) == null) {
                         Eip2.Q_out.addFirst(new Tuple<>(Y, Eip2.lOut(Y)));
                     }
@@ -466,8 +419,6 @@ public class PolylogDSCC implements DecrementalSCC {
                 if (Eip2.lIn(Y) == INFINITY) {// Y was already disconnected in T_In
                     Eip2.unreachableVerticesInTree.add(Z);
                 } else {
-//                    Eip2.disconnectIn(Y);
-//                    Eip2.disconnectIn(Z);
                     if (Eip2.shortestPathInTreeParents.get(Y) == null) {
                         Eip2.Q_in.addFirst(new Tuple<>(Y, Eip2.lIn(Y)));
                     }
