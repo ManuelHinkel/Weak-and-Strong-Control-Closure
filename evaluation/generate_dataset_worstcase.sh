@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# example: ./generate_dataset_weak.sh "./data_weak"
-
 OUT_DIR="data_worstcase"
 
 mkdir -p "$OUT_DIR"

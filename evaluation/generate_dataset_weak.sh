@@ -5,17 +5,17 @@ OUT_DIR="data_weak"
 mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
-nMin=2000
-nMax=2001
+nMin=100
+nMax=501
 nStep=100
 
-pMin=0.90
+pMin=0.80
 pMax=0.91
-pStep=0.3
+pStep=0.1
 
 pPMin=0.2
-pPMax=0.21
-pPStep=0.2
+pPMax=0.31
+pPStep=0.1
 
 for ((i=nMin; i<nMax; i+=nStep)); do
     for p in $(seq "$pMin" "$pStep" "$pMax"); do

@@ -29,6 +29,14 @@ public class Graph<T> {
         return adjacencyList.size();
     }
 
+    public int m() {
+        int m = 0;
+        for(T key: adjacencyList.keySet()) {
+            m += adjacencyList.get(key).size();
+        }
+        return m;
+    }
+
     public boolean isEmpty() {
         return adjacencyList.isEmpty();
     }

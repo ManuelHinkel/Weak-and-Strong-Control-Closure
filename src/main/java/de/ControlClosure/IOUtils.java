@@ -8,13 +8,10 @@ import java.util.List;
 
 public class IOUtils {
     public static void main(String[] args) {
-        if (args.length != 2) throw new IllegalArgumentException("Expected <path to individual results> <folder for combined results> and a file!");
+        if (args.length != 2) throw new IllegalArgumentException("Expected [path to individual results] [folder for combined results]!");
 
         String sourceFolder = args[0];
         String outputFolder = args[1];
-
-        System.out.println(args[0]);
-        System.out.println(args[1]);
 
         combineCSVFiles(sourceFolder, outputFolder);
     }
@@ -35,7 +32,7 @@ public class IOUtils {
                 Files.delete(csvFile);
             }
 
-            writeToFile(outputFolder, sourcePath.getFileName() + "_results.csv", mergedContent.toString());
+            writeToFile(outputFolder, "combined.csv", mergedContent.toString());
         } catch (IOException e) {
             throw new RuntimeException("Failed to combine result files!");
         }
@@ -49,7 +46,6 @@ public class IOUtils {
             Path outputFile = folderPath.resolve(fileName);
             Files.writeString(outputFile, content);
         } catch (IOException e) {
-            System.out.println(e);
             throw new RuntimeException("Failed to write to file!");
         }
     }

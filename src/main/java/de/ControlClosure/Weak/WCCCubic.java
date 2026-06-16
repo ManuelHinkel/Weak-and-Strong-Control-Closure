@@ -1,8 +1,6 @@
 package de.ControlClosure.Weak;
 
-import de.ControlClosure.Graph;
-import de.ControlClosure.GraphUtils;
-import de.ControlClosure.Vertex;
+import de.ControlClosure.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,9 +31,7 @@ public class WCCCubic implements WeakControlClosure{
                     }
                 }
                 if (changed) break;
-
             }
-
         }
 
         return X;

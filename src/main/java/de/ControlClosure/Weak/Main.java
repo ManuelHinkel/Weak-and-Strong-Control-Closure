@@ -11,28 +11,42 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        if (args.length != 3) throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] [file] [out]!");
-        String algorithm = args[0];
-        WeakControlClosure wcc;
-        switch (algorithm) {
-            case "cubic" -> {wcc = new WCCCubic();}
-            case "quadratic" -> {wcc = new WCCDecrementalSCC(new TarjanDSCC());}
-            case "polylog" -> {wcc = new WCCDecrementalSCC(new PolylogDSCC());}
-            default -> throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] !");
-        }
+        if (args.length != 2) throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] [file]!");
 
         Path filePath = Path.of(args[1]);
+        String fileName = filePath.getFileName().toString();
+
         String content;
         try {
             content = Files.readString(filePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         Tuple<Graph<Vertex>, Set<Vertex>> parsed = GraphUtils.parseWCCInstance(content);
-        Set<Vertex> res = wcc.wcc(parsed.first,parsed.second);
+        Graph<Vertex> G = parsed.first;
+        Set<Vertex> Vprime = parsed.second;
 
-        String resS = res.toString();
-        IOUtils.writeToFile(args[2],filePath.getFileName().toString().replace("txt", "csv"),resS);
+
+        String algorithm = args[0];
+        WeakControlClosure wcc;
+        Statistics statistics;
+        switch (algorithm) {
+            case "cubic" -> {
+                wcc = new WCCCubic();
+                statistics = new Statistics(fileName, "Cubic");
+            }
+            case "quadratic" -> {
+                wcc = new WCCDecrementalSCC(new TarjanDSCC());
+                statistics = new DSCCStatistics(fileName, "Quadratic");
+            }
+            case "polylog" -> {
+                wcc = new WCCDecrementalSCC(new PolylogDSCC());
+                statistics = new DSCCStatistics(fileName, "Polylog");
+            }
+            default -> throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] !");
+        }
+
+        wcc.wcc(G,Vprime,statistics);
+        System.out.println(statistics);
     }
 }

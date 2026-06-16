@@ -10,20 +10,32 @@ public class GraphGenerator {
     private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
-        if (args.length != 4) {
-            throw new IllegalArgumentException("Expected [folder] [n] [p] [p']!");
+        if (args.length != 4 && args.length != 2) {
+            throw new IllegalArgumentException("Expected arguments: [folder] [n] [p] [p'] or [folder] [k]!");
         }
 
         String dataFolder = args[0];
-        int n = Integer.parseInt(args[1]);
-        double p = Double.parseDouble(args[2]);
-        double pPrime = Double.parseDouble(args[3]);
 
+        Graph<Vertex> G;
+        Set<Vertex> Vprime;
+        String fileName;
+        if (args.length == 4) {
+            int n = Integer.parseInt(args[1]);
+            double p = Double.parseDouble(args[2]);
+            double pPrime = Double.parseDouble(args[3]);
 
-        Graph<Vertex> G = randomCFG(n, p);
-        Set<Vertex> Vprime = chooseVprime(G.vertices(), pPrime);
+            G = randomCFG(n, p);
+            Vprime = chooseVprime(G.vertices(), pPrime);
 
-        String fileName = "G n=" + n + ", p=" + p + ", p'=" + pPrime + ".txt";
+            fileName = "Random n=" + n + " p=" + p + " p'=" + pPrime + ".txt";
+        } else {
+            int k = Integer.parseInt(args[1]);
+
+            Tuple<Graph<Vertex>, Set<Vertex>> res = makeQuadraticDSCCGraph(k);
+            G = res.first;
+            Vprime = res.second;
+            fileName = "WorstCase n=" + (2*k) + ".txt";
+        }
         String content = makeString(G,Vprime);
         IOUtils.writeToFile(dataFolder, fileName, content);
     }

@@ -1,5 +1,6 @@
-evaluation/data
-evaluation/out
+!evaluation/*.sh
+evaluation/*/
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

@@ -1,15 +1,17 @@
 package de.ControlClosure.Weak;
 
+import de.ControlClosure.*;
 import de.ControlClosure.DSCC.DecrementalSCC;
-import de.ControlClosure.Graph;
-import de.ControlClosure.GraphUtils;
-import de.ControlClosure.SCC;
-import de.ControlClosure.Vertex;
 
 import java.util.*;
 
 public class WCCDecrementalSCC implements WeakControlClosure{
     private final DecrementalSCC dscc;
+    private DSCCStatistics statistics = null;
+
+    // Statistics
+    private List<Integer> newSCCCounts;
+    private List<Double> largestNewSCCToCurrentRatios;
 
     public WCCDecrementalSCC(DecrementalSCC dscc) {
         this.dscc = dscc;
@@ -17,6 +19,10 @@ public class WCCDecrementalSCC implements WeakControlClosure{
 
     @Override
     public Set<Vertex> wcc(Graph<Vertex> G, Set<Vertex> Vp) {
+        // Statistics
+        newSCCCounts = new ArrayList<>();
+        largestNewSCCToCurrentRatios = new ArrayList<>();
+
         Map<SCC<Vertex>, Set<Vertex>> ThetaHat = new HashMap<>();
         Map<SCC<Vertex>, Set<Vertex>> Boundary = new HashMap<>();
 
@@ -25,8 +31,6 @@ public class WCCDecrementalSCC implements WeakControlClosure{
         Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
 
         dscc.initialize(H);
-//        System.out.println(H);
-//        System.out.println("SCCs " + dscc.SCCs());
         assert GraphUtils.areSCCsTopologicallyOrdered(H, dscc.SCCs());
 
         dscc.delete(Vp);
@@ -39,7 +43,26 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                 Set<Vertex> B = Boundary.getOrDefault(scc, new HashSet<>()); // O(1)
                 assert Collections.disjoint(X,B);
                 X.addAll(B);    // O(X) in total
+
+                int sccCountBefore = dscc.sccCount();                           // Statistics
+
                 dscc.delete(B); // O(T(n)) in total
+
+                int sccCountAfter = dscc.sccCount();                            // Statistics
+                int sccCountDiff = sccCountAfter - sccCountBefore;              // Statistics
+                newSCCCounts.add(sccCountDiff);                                 // Statistics
+
+                // Statistics: Determine largest size of newly created SCC
+                if (sccCountDiff > 0) {
+                    int largest = 0;
+                    for(int j = i; j < i+sccCountDiff+1; j++) { // If one SCC splits into two, then sccCountDiff = 1
+                        if (dscc.sigmaRev(j).size() > largest) {
+                            largest = dscc.sigmaRev(j).size();
+                        }
+                    }
+                    double ratio = largest / (double) scc.size();
+                    largestNewSCCToCurrentRatios.add(ratio);
+                }
 
                 // Ensure that it is empty because DSCC might reuse same SCC object
                 ThetaHat.put(scc, new HashSet<>());
@@ -76,6 +99,28 @@ public class WCCDecrementalSCC implements WeakControlClosure{
             }
         }
 
+        // Statistics
+        if (statistics != null) {
+            statistics.setAvgNewSCCCount(newSCCCounts
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .average()
+                    .getAsDouble());
+            statistics.setAvgRatioLargestNewToCurrent(largestNewSCCToCurrentRatios
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .average()
+                    .getAsDouble());
+        }
         return X;
+    }
+
+    @Override
+    public Set<Vertex> wcc(Graph<Vertex> G, Set<Vertex> Vp, Statistics statistics) {
+        if (statistics instanceof DSCCStatistics) {
+            this.statistics = (DSCCStatistics) statistics;
+        }
+
+        return WeakControlClosure.super.wcc(G,Vp,statistics);
     }
 }
