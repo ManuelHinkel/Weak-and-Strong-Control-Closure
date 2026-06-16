@@ -18,7 +18,6 @@ public class WCCTest {
             new WCCDecrementalSCC(new PolylogDSCC()),
     };
 
-    //TODO: splitres has wrong order, GEStree vertices in split are added in reversed direction
     @Test
     public void test(){
         for (WeakControlClosure wcc : WCC) {

@@ -1,9 +1,8 @@
 package de.ControlClosure.DSCC.Bernstein;
 
-import de.ControlClosure.Graph;
-import de.ControlClosure.GraphUtils;
-import de.ControlClosure.SCC;
-import de.ControlClosure.Vertex;
+import de.ControlClosure.*;
+import de.ControlClosure.DSCC.DecrementalSCC;
+import de.ControlClosure.DSCC.TarjanDSCC;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -25,21 +24,21 @@ public class DSCCTest {
     @Test
     public void testDeletion2() {
         Graph<Vertex> G = buildLarge();
-        PolylogDSCC dscc = new PolylogDSCC();
+        DecrementalSCC dscc = new TarjanDSCC();
         dscc.initialize(G);
-        assertTrue(GraphUtils.areSCCs(dscc.sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[8],v[0]);
-        assertTrue(GraphUtils.areSCCs(dscc.sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[9],v[0]);
-        assertTrue(GraphUtils.areSCCs(dscc.sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[14],v[0]);
-        assertTrue(GraphUtils.areSCCs(dscc.sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[17],v[1]);
-        assertTrue(GraphUtils.areSCCs(dscc.sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
     }
 
     static Graph<Vertex> G() {

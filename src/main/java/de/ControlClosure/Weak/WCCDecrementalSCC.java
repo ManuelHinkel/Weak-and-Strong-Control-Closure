@@ -10,6 +10,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
     private DSCCStatistics statistics = null;
 
     // Statistics
+    private List<Integer> sccSizes;
     private List<Integer> newSCCCounts;
     private List<Double> largestNewSCCToCurrentRatios;
 
@@ -20,6 +21,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
     @Override
     public Set<Vertex> wcc(Graph<Vertex> G, Set<Vertex> Vp) {
         // Statistics
+        sccSizes = new ArrayList<>();
         newSCCCounts = new ArrayList<>();
         largestNewSCCToCurrentRatios = new ArrayList<>();
 
@@ -38,6 +40,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
         int i = 0;
         while (i < dscc.sccCount()) {
             SCC<Vertex> scc = dscc.sigmaRev(i); // O(1)
+            sccSizes.add(scc.size());                                           // Statistics
 
             if (ThetaHat.getOrDefault(scc, new HashSet<>()).size() >= 2) { // O(1)
                 Set<Vertex> B = Boundary.getOrDefault(scc, new HashSet<>()); // O(1)
@@ -45,6 +48,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                 X.addAll(B);    // O(X) in total
 
                 int sccCountBefore = dscc.sccCount();                           // Statistics
+                int sccSize = scc.size();                                       // Statistics (needed bc PolylogDSCC reuses SCC objects -> scc.size() may change in deletion)
 
                 dscc.delete(B); // O(T(n)) in total
 
@@ -60,7 +64,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                             largest = dscc.sigmaRev(j).size();
                         }
                     }
-                    double ratio = largest / (double) scc.size();
+                    double ratio = largest / (double) sccSize;
                     largestNewSCCToCurrentRatios.add(ratio);
                 }
 
@@ -101,16 +105,21 @@ public class WCCDecrementalSCC implements WeakControlClosure{
 
         // Statistics
         if (statistics != null) {
+            statistics.setAvgSCCSize(sccSizes
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .average()
+                    .orElse(-1));
             statistics.setAvgNewSCCCount(newSCCCounts
                     .stream()
                     .mapToInt(Integer::intValue)
                     .average()
-                    .getAsDouble());
+                    .orElse(-1));
             statistics.setAvgRatioLargestNewToCurrent(largestNewSCCToCurrentRatios
                     .stream()
                     .mapToDouble(Double::doubleValue)
                     .average()
-                    .getAsDouble());
+                    .orElse(-1));
         }
         return X;
     }

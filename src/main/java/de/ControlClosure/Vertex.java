@@ -25,4 +25,8 @@ public class Vertex {
     public String toString() {
         return String.valueOf(id);
     }
+
+    public static void resetID() {
+        nextId = 0;
+    }
 }

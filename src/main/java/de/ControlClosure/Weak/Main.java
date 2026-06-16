@@ -11,6 +11,7 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
+        assert false; // Test if Assertions are disabled
         if (args.length != 2) throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] [file]!");
 
         Path filePath = Path.of(args[1]);
