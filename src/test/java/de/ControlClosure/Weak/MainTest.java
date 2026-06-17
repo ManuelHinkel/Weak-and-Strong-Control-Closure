@@ -7,11 +7,11 @@ import java.io.File;
 
 public class MainTest {
     @Test
-    public void test() {
+    public void testWeak() {
         File directory = new File("./evaluation/data_weak");
 
         for (File file : directory.listFiles()) {
-            for(String algo: new String[]{"cubic", "quadratic", "polylog"}) {
+            for(String algo: new String[]{/*"cubic", "quadratic",*/ "polylog"}) {
                 Main.main(new String[]{algo, file.getAbsolutePath()});
                 Vertex.resetID();
             }

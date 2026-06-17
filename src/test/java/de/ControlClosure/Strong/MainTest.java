@@ -7,7 +7,7 @@ import java.io.File;
 
 public class MainTest {
     @Test
-    public void test() {
+    public void testStrong() {
         File directory = new File("./evaluation/data_strong");
 
         for (File file : directory.listFiles()) {

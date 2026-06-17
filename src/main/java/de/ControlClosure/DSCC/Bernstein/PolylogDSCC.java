@@ -259,13 +259,27 @@ public class PolylogDSCC implements DecrementalSCC {
                     PNew = splitResult.second;
                 }
 
+                GESTree<Node> Eip2 = null;
+                if (i+1 < alpha) {
+                    Vertex x = X.first();
+                    Node Xip2 = vertexNodeMaps.get(i+2).get(x);
+                    Eip2 = gesTreeM.get(Xip2);
+                }
+
+                Set<Node> SAugNodes = new HashSet<>();
                 for(Set<Node> scc: PNew) {
                     // create a new node
                     Set<Vertex> vertexSet = new LinkedHashSet<>();
+                    boolean nodeInSAug = false;
                     for(Node n: scc) {
+                        nodeInSAug = SAug.contains(n); // Can only be true for single Node SCCs
                         vertexSet.addAll(n.vertices());
                     }
                     Node Z = new Node(vertexSet);
+
+                    if (nodeInSAug) {
+                        SAugNodes.add(Z);
+                    }
 
                     Node Zprime = splitNode(i+1,Z, u,v);
 
@@ -292,7 +306,10 @@ public class PolylogDSCC implements DecrementalSCC {
                         nodesPotentiallyUnreachable.add(Zprime);
                     }
                 }
-                E.augment(SAug);
+                // Do not augment on E, because SAug \subseteq S_i+1, and E lives on G_i, isntead augment on level above
+                if(i+1 < alpha) {
+                    Eip2.augment(SAugNodes);
+                }
                 separators.get(i+1).addAll(SAug);
             }
 

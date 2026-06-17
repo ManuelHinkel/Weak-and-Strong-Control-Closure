@@ -18,9 +18,6 @@ public class GESTree <T extends Vertex>{
     public final HashMap<T, Integer> outDist = new HashMap<>();
     public final HashMap<T, Integer> inDist = new HashMap<>();
 
-//    public final HashMap<T, List<T>> levelEdgesOut = new HashMap<>();
-//    public final HashMap<T, List<T>> levelEdgesIn = new HashMap<>();
-
     public final HashMap<T, T> shortestPathOutTreeParents = new HashMap<>();
     public final HashMap<T, T> shortestPathInTreeParents = new HashMap<>();
     public final HashMap<T, List<T>> shortestPathOutTreeChildren = new HashMap<>();
@@ -64,24 +61,6 @@ public class GESTree <T extends Vertex>{
         this.S = S;
         this.delta = delta;
 
-//        for(T v: G.vertices()) {
-//            List<T> levelEdgesOutSet = new ArrayList<>();
-//            for(T i: G.incoming(v)) {
-//                if (!v.equals(i)) {
-//                    levelEdgesOutSet.add(i);
-//                }
-//            }
-//            levelEdgesOut.put(v, levelEdgesOutSet);
-//
-//            List<T> levelEdgesInSet = new ArrayList<>();
-//            for(T i: G.outgoing(v)) {
-//                if (!v.equals(i)) {
-//                    levelEdgesInSet.add(i);
-//                }
-//            }
-//            levelEdgesIn.put(v, levelEdgesInSet);
-//        }
-
         buildShortestPathOutTree();
         buildShortestPathInTree();
         assert Q_out.isEmpty();
@@ -113,8 +92,6 @@ public class GESTree <T extends Vertex>{
     }
 
     public void remove(T u, T v) {
-//        levelEdgesOut.get(v).remove(u);
-//        levelEdgesIn.get(u).remove(v);
         if (isOutTreeEdge(u, v)) {
             shortestPathOutTreeChildren.get(u).remove(v);
             shortestPathOutTreeParents.put(v, null);
@@ -143,7 +120,6 @@ public class GESTree <T extends Vertex>{
         }
 
         G.deleteFromMaps(vertices);
-        // TODO: merge or O(1) or something
         unreachableVerticesOutTree.removeAll(vertices);
         unreachableVerticesInTree.removeAll(vertices);
 
@@ -156,20 +132,6 @@ public class GESTree <T extends Vertex>{
             inDist.remove(v);
         }
     }
-
-//    public void remove(Set<T> vertices) {
-//        for (T v: vertices) {
-//            for (T w: new ArrayList<>(G.outgoing(v))) {
-//                remove(v, w);
-//            }
-//            for (T u: new ArrayList<>(G.incoming(v))) {
-//                remove(u, v);
-//            }
-//        }
-//        verts.removeAll(vertices);
-//        unreachableVerticesOutTree.removeAll(vertices);
-//        unreachableVerticesInTree.removeAll(vertices);
-//    }
 
     public boolean hasUnreachable() {
         return !(unreachableVerticesOutTree.isEmpty() && unreachableVerticesInTree.isEmpty());
@@ -307,9 +269,6 @@ public class GESTree <T extends Vertex>{
         return u.equals(shortestPathInTreeParents.get(v));
     }
 
-    // Problem: if all children of root are disconencted, then tehy may reconnect at subsequent vertex with same distance
-    // -> GES does not notice
-
     protected void fixOutTree() {
         while (!Q_out.isEmpty() && Q_out.peek().second < delta + 1) {
             Tuple<T, Integer> head = Q_out.poll();
@@ -323,7 +282,6 @@ public class GESTree <T extends Vertex>{
 
             boolean reconnected = false;
 
-            //for(T y: G.incoming(v)) {
             for(T y: G.incomingNSL(v)) {
                 if (!v.equals(y) && l == lOut(y) + w(y,v)) {
                     shortestPathOutTreeParents.put(v,y);
@@ -367,7 +325,6 @@ public class GESTree <T extends Vertex>{
 
             boolean reconnected = false;
 
-            //for(T y: G.outgoing(v)){
             for(T y: G.outgoingNSL(v)) {
                 if (!v.equals(y) && l == lIn(y) + w(v, y)) {
                     shortestPathInTreeParents.put(v, y);
@@ -432,7 +389,7 @@ public class GESTree <T extends Vertex>{
         for(T n: S) {
             for(T v: G.outgoing(n)) {
                 if (isOutTreeEdge(n,v)) {
-                    disconnectOut(v); // TODO?
+                    disconnectOut(v);
                 }
                 if (isInTreeEdge(v,n)) {
                     disconnectIn(n);
