@@ -1,4 +1,4 @@
-package de.ControlClosure.Weak;
+package de.ControlClosure.Strong;
 
 import de.ControlClosure.*;
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
@@ -23,31 +23,32 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Tuple<Graph<Vertex>, Tuple<Set<Vertex>,Set<Vertex>>> parsed = GraphUtils.parseInstance(content);
+        Tuple<Graph<Vertex>, Tuple<Set<Vertex>, Set<Vertex>>> parsed = GraphUtils.parseInstance(content);
         Graph<Vertex> G = parsed.first;
         Set<Vertex> Vprime = parsed.second.first;
+        Set<Vertex> P = parsed.second.second;
 
 
         String algorithm = args[0];
-        WeakControlClosure wcc;
+        StrongControlClosure scc;
         Statistics statistics;
         switch (algorithm) {
             case "cubic" -> {
-                wcc = new WCCCubic();
+                scc = new SCCCubic();
                 statistics = new Statistics(fileName, "Cubic");
             }
             case "quadratic" -> {
-                wcc = new WCCDecrementalSCC(new TarjanDSCC());
+                scc = new SCCDecrementalSCC(new TarjanDSCC());
                 statistics = new DSCCStatistics(fileName, "Quadratic");
             }
             case "polylog" -> {
-                wcc = new WCCDecrementalSCC(new PolylogDSCC());
+                scc = new SCCDecrementalSCC(new PolylogDSCC());
                 statistics = new DSCCStatistics(fileName, "Polylog");
             }
             default -> throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] !");
         }
 
-        wcc.wcc(G,Vprime,statistics);
+        scc.scc(G,Vprime,P,statistics);
         System.out.println(statistics);
     }
 }

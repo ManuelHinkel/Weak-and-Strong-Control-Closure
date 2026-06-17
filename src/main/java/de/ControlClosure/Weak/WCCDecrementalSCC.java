@@ -7,9 +7,9 @@ import java.util.*;
 
 public class WCCDecrementalSCC implements WeakControlClosure{
     private final DecrementalSCC dscc;
-    private DSCCStatistics statistics = null;
 
     // Statistics
+    private DSCCStatistics statistics = null;
     private List<Integer> sccSizes;
     private List<Integer> newSCCCounts;
     private List<Double> largestNewSCCToCurrentRatios;
@@ -33,13 +33,13 @@ public class WCCDecrementalSCC implements WeakControlClosure{
         Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
 
         dscc.initialize(H);
-        assert GraphUtils.areSCCsTopologicallyOrdered(H, dscc.SCCs());
+        assert GraphUtils.areSCCsTopologicallyOrdered(H, dscc.SCCs().toList());
 
         dscc.delete(Vp);
 
-        int i = 0;
-        while (i < dscc.sccCount()) {
-            SCC<Vertex> scc = dscc.sigmaRev(i); // O(1)
+        SCC<Vertex> lastMoved = null;
+        SCC<Vertex> scc;
+        while ((scc = dscc.SCCs().prev(lastMoved)) != null){
             sccSizes.add(scc.size());                                           // Statistics
 
             if (ThetaHat.getOrDefault(scc, new HashSet<>()).size() >= 2) { // O(1)
@@ -55,14 +55,15 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                 int sccCountAfter = dscc.sccCount();                            // Statistics
                 int sccCountDiff = sccCountAfter - sccCountBefore;              // Statistics
                 newSCCCounts.add(sccCountDiff);                                 // Statistics
-
                 // Statistics: Determine largest size of newly created SCC
                 if (sccCountDiff > 0) {
                     int largest = 0;
-                    for(int j = i; j < i+sccCountDiff+1; j++) { // If one SCC splits into two, then sccCountDiff = 1
-                        if (dscc.sigmaRev(j).size() > largest) {
-                            largest = dscc.sigmaRev(j).size();
+                    SCC<Vertex> current = dscc.SCCs().prev(lastMoved);
+                    for(int j = 0; j < sccCountDiff+1; j++) { // If one SCC splits into two, then sccCountDiff = 1
+                        if (current.size() > largest) {
+                            largest = current.size();
                         }
+                        current = dscc.SCCs().prev(current);
                     }
                     double ratio = largest / (double) sccSize;
                     largestNewSCCToCurrentRatios.add(ratio);
@@ -99,7 +100,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                         }
                     }
                 }
-                i++;
+                lastMoved = scc;
             }
         }
 

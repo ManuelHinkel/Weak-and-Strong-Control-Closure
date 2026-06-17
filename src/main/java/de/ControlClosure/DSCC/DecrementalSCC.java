@@ -1,5 +1,6 @@
 package de.ControlClosure.DSCC;
 
+import de.ControlClosure.DSCC.Bernstein.HashList;
 import de.ControlClosure.Graph;
 import de.ControlClosure.SCC;
 import de.ControlClosure.Vertex;
@@ -16,14 +17,7 @@ public interface DecrementalSCC {
 
     int sccCount();
 
-    List<SCC<Vertex>> SCCs();
-
-    SCC<Vertex> sigma(int index);
-
-    default SCC<Vertex> sigmaRev(int index) {
-        assert index >= 0 && index < sccCount();
-        return sigma((sccCount() - 1) - index);
-    }
+    HashList<SCC<Vertex>> SCCs();
 
     SCC<Vertex> scc(Vertex v);
 }

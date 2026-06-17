@@ -2,11 +2,18 @@ package de.ControlClosure.Strong;
 
 import de.ControlClosure.*;
 import de.ControlClosure.DSCC.DecrementalSCC;
+import de.ControlClosure.Weak.WeakControlClosure;
 
 import java.util.*;
 
 public class SCCDecrementalSCC implements StrongControlClosure{
     private final DecrementalSCC dscc;
+
+    // Statistics
+    private DSCCStatistics statistics = null;
+    private List<Integer> sccSizes;
+    private List<Integer> newSCCCounts;
+    private List<Double> largestNewSCCToCurrentRatios;
 
     public SCCDecrementalSCC(DecrementalSCC dscc) {
         this.dscc = dscc;
@@ -15,6 +22,11 @@ public class SCCDecrementalSCC implements StrongControlClosure{
 
     @Override
     public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P) {
+        // Statistics
+        sccSizes = new ArrayList<>();
+        newSCCCounts = new ArrayList<>();
+        largestNewSCCToCurrentRatios = new ArrayList<>();
+
         Map<SCC<Vertex>, Set<Vertex>> ThetaHat = new HashMap<>();
         Map<SCC<Vertex>, Set<Vertex>> Boundary = new HashMap<>();
         Map<SCC<Vertex>, Set<Vertex>> CompletePath = new HashMap<>();
@@ -26,9 +38,10 @@ public class SCCDecrementalSCC implements StrongControlClosure{
         dscc.initialize(H);
         dscc.delete(Vp);
 
-        int i = 0;
-        while (i < dscc.sccCount()) {
-            SCC<Vertex> scc = dscc.sigmaRev(i); // O(1)
+        SCC<Vertex> lastMoved = null;
+        SCC<Vertex> scc;
+        while ((scc = dscc.SCCs().prev(lastMoved)) != null){
+            sccSizes.add(scc.size());                                           // Statistics
 
             Set<Vertex> ThetaHatSCC = ThetaHat.getOrDefault(scc,new HashSet<>());
 
@@ -49,8 +62,30 @@ public class SCCDecrementalSCC implements StrongControlClosure{
 
                 X.addAll(B);    // O(X) in total
                 X.addAll(C);    // O(X) in total
+
+                int sccCountBefore = dscc.sccCount();                           // Statistics
+                int sccSize = scc.size();                                       // Statistics (needed bc PolylogDSCC reuses SCC objects -> scc.size() may change in deletion)
+
+
                 dscc.delete(B); // O(T(n)) in total
                 dscc.delete(C); // O(T(n)) in total
+
+                int sccCountAfter = dscc.sccCount();                            // Statistics
+                int sccCountDiff = sccCountAfter - sccCountBefore;              // Statistics
+                newSCCCounts.add(sccCountDiff);                                 // Statistics
+                // Statistics: Determine largest size of newly created SCC
+                if (sccCountDiff > 0) {
+                    int largest = 0;
+                    SCC<Vertex> current = dscc.SCCs().prev(lastMoved);
+                    for(int j = 0; j < sccCountDiff+1; j++) { // If one SCC splits into two, then sccCountDiff = 1
+                        if (current.size() > largest) {
+                            largest = current.size();
+                        }
+                        current = dscc.SCCs().prev(current);
+                    }
+                    double ratio = largest / (double) sccSize;
+                    largestNewSCCToCurrentRatios.add(ratio);
+                }
 
                 // Ensure that it is empty because DSCC might reuse same SCC object
                 ThetaHat.put(scc, new HashSet<>());
@@ -103,9 +138,37 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                         }
                     }
                 }
-                i++;
+                lastMoved=scc;
             }
         }
+        // Statistics
+        if (statistics != null) {
+            statistics.setAvgSCCSize(sccSizes
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .average()
+                    .orElse(-1));
+            statistics.setAvgNewSCCCount(newSCCCounts
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .average()
+                    .orElse(-1));
+            statistics.setAvgRatioLargestNewToCurrent(largestNewSCCToCurrentRatios
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .average()
+                    .orElse(-1));
+        }
+
         return X;
+    }
+
+    @Override
+    public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P, Statistics statistics) {
+        if (statistics instanceof DSCCStatistics) {
+            this.statistics = (DSCCStatistics) statistics;
+        }
+
+        return StrongControlClosure.super.scc(G,Vp,P,statistics);
     }
 }

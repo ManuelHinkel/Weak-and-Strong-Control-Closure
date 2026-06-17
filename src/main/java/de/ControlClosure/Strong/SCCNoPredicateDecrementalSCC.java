@@ -25,10 +25,9 @@ public class SCCNoPredicateDecrementalSCC implements StrongControlClosureNoPredi
         dscc.initialize(H);
         dscc.delete(Vp);
 
-        int i = 0;
-        while (i < dscc.sccCount()) {
-            SCC<Vertex> scc = dscc.sigmaRev(i); // O(1)
-
+        SCC<Vertex> lastMoved = null;
+        SCC<Vertex> scc;
+        while ((scc = dscc.SCCs().prev(lastMoved)) != null){
             Set<Vertex> ThetaHatSCC = ThetaHat.getOrDefault(scc,new HashSet<>());
 
             // Currently ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc), which means for a single-vertex SCC that
@@ -102,7 +101,7 @@ public class SCCNoPredicateDecrementalSCC implements StrongControlClosureNoPredi
                         }
                     }
                 }
-                i++;
+                lastMoved=scc;
             }
         }
         return X;

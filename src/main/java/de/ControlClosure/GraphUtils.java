@@ -196,16 +196,17 @@ public class GraphUtils {
         return true;
     }
 
-    public static Tuple<Graph<Vertex>, Set<Vertex>> parseWCCInstance(String instance) {
+    public static Tuple<Graph<Vertex>, Tuple<Set<Vertex>, Set<Vertex>>> parseInstance(String instance) {
         Map<Vertex, List<Vertex>> G = new HashMap<>();
         Set<Vertex> Vprime = new HashSet<>();
+        Set<Vertex> P = new HashSet<>();
 
         String[] lines = instance.split(System.lineSeparator());
 
         int numVertices = 0;
         for(String line: lines) {
             line.trim();
-            if (!line.startsWith("V':")) {
+            if (!line.startsWith("V':") && !line.startsWith("P:")) {
                 numVertices++;
             }
         }
@@ -216,7 +217,7 @@ public class GraphUtils {
         }
 
         for(String line: lines) {
-            if (!line.startsWith("V':")) {
+            if (!line.startsWith("V':") && !line.startsWith("P:")) {
                 String[] split = line.split(":",2);
                 String vertexId = split[0];
                 String adjacencyString = split[1];
@@ -244,8 +245,19 @@ public class GraphUtils {
                     }
                 }
             }
+
+            if (line.startsWith("P:")) {
+                String PString = line.split(":",2)[1];
+                String[] vertex = PString.split(",");
+
+                for(String v: vertex) {
+                    if (!v.isBlank()) {
+                        P.add(V[Integer.parseInt(v.trim())]);
+                    }
+                }
+            }
         }
 
-        return new Tuple<>(new Graph<>(G), Vprime);
+        return new Tuple<>(new Graph<>(G), new Tuple<>(Vprime, P));
     }
 }

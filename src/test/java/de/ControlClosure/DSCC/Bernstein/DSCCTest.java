@@ -26,19 +26,19 @@ public class DSCCTest {
         Graph<Vertex> G = buildLarge();
         DecrementalSCC dscc = new TarjanDSCC();
         dscc.initialize(G);
-        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().toList().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[8],v[0]);
-        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().toList().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[9],v[0]);
-        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().toList().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[14],v[0]);
-        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().toList().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
 
         dscc.delete(v[17],v[1]);
-        assertTrue(GraphUtils.areSCCs(dscc.SCCs().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
+        assertTrue(GraphUtils.areSCCs(dscc.SCCs().toList().stream().map(SCC::vertices).toList(), G, new HashSet<>()));
     }
 
     static Graph<Vertex> G() {

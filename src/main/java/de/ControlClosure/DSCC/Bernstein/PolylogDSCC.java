@@ -10,7 +10,7 @@ import static de.ControlClosure.DSCC.Bernstein.GESTree.INFINITY;
 public class PolylogDSCC implements DecrementalSCC {
     private Graph<Vertex> G;
 
-    public List<SCC<Vertex>> sccs;
+    public HashList<SCC<Vertex>> sccs;
 
     private List<Map<Vertex, Node>> vertexNodeMaps;
     private List<CondensationGraph> graphs;
@@ -23,7 +23,7 @@ public class PolylogDSCC implements DecrementalSCC {
     @Override
     public void initialize(Graph<Vertex> G) {
         this.G = G;
-        sccs = new ArrayList<>();
+        sccs = new HashList<>();
         alpha = MathUtil.lg2f(G.size()) + 1;
         delta = 128.0 * Math.pow(MathUtil.lg2c(G.size()), 2.0);
 
@@ -38,7 +38,7 @@ public class PolylogDSCC implements DecrementalSCC {
             delete(e.first,e.second);
         }
 
-        assert GraphUtils.areSCCs(sccs.stream().map(SCC::vertices).toList(), G, new HashSet<>());
+        assert GraphUtils.areSCCs(sccs.toList().stream().map(SCC::vertices).toList(), G, new HashSet<>());
     }
 
     private void preprocessing(double delta) {
@@ -94,12 +94,8 @@ public class PolylogDSCC implements DecrementalSCC {
             graphs.add(Gip1);
         }
 
-        for(int i = 0; i <= alpha; i++) {
-            assert mappingsCorrect(i);
-        }
-
         assert graphs.get(alpha).size() == 1;
-        sccs.addAll(graphs.get(alpha).vertices());
+        sccs.addLast((SCC<Vertex>) graphs.get(alpha).vertices().toArray()[0]);
     }
 
     public static <T extends Vertex> Tuple<Set<T>, List<Set<T>>> split(Graph<T> G, Separator<T> S, double d) {
@@ -309,8 +305,8 @@ public class PolylogDSCC implements DecrementalSCC {
         // Finally, also delete it from G
         G.delete(u,v);
 
-        assert GraphUtils.areSCCs(sccs.stream().map(SCC::vertices).toList(),G,new HashSet<>());
-        assert GraphUtils.areSCCsTopologicallyOrdered(G,sccs);
+        assert GraphUtils.areSCCs(sccs.toList().stream().map(SCC::vertices).toList(),G,new HashSet<>());
+        assert GraphUtils.areSCCsTopologicallyOrdered(G,sccs.toList());
     }
 
     private Node splitNode(int ip1, Node Z, Vertex x, Vertex y) {
@@ -461,12 +457,14 @@ public class PolylogDSCC implements DecrementalSCC {
 
                 if (hasEdgeToY) {
                     // Add Z before Y
-                    int i = sccs.indexOf(Y);
-                    sccs.add(i, Z);
+                    sccs.insertBefore(Y,Z);
+//                    int i = sccs.indexOf(Y);
+//                    sccs.add(i, Z);
                 } else {
                     // Add Z after Y
-                    int i = sccs.indexOf(Y);
-                    sccs.add(i+1, Z);
+                    sccs.insertAfter(Y,Z);
+//                    int i = sccs.indexOf(Y);
+//                    sccs.add(i+1, Z);
                 }
             }
             return Z;
@@ -489,15 +487,15 @@ public class PolylogDSCC implements DecrementalSCC {
     }
 
     @Override
-    public List<SCC<Vertex>> SCCs() {
+    public HashList<SCC<Vertex>> SCCs() {
         return sccs;
     }
 
-    @Override
-    public SCC<Vertex> sigma(int index) {
-        assert index >= 0 && index < sccCount();
-        return sccs.get(index);
-    }
+//    @Override
+//    public SCC<Vertex> sigma(int index) {
+//        assert index >= 0 && index < sccCount();
+//        return sccs.get(index);
+//    }
 
     @Override
     public SCC<Vertex> scc(Vertex v) {

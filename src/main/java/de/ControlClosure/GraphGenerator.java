@@ -10,16 +10,17 @@ public class GraphGenerator {
     private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
-        if (args.length != 4 && args.length != 2) {
-            throw new IllegalArgumentException("Expected arguments: [folder] [n] [p] [p'] or [folder] [k]!");
+        if (args.length != 4 && args.length != 5 && args.length != 2) {
+            throw new IllegalArgumentException("Expected arguments: [folder] [n] [p] [p'] <pF> or [folder] [k]!");
         }
 
         String dataFolder = args[0];
 
         Graph<Vertex> G;
         Set<Vertex> Vprime;
+        Set<Vertex> P = null;
         String fileName;
-        if (args.length == 4) {
+        if (args.length == 4 || args.length == 5) {
             int n = Integer.parseInt(args[1]);
             double p = Double.parseDouble(args[2]);
             double pPrime = Double.parseDouble(args[3]);
@@ -27,7 +28,15 @@ public class GraphGenerator {
             G = randomCFG(n, p);
             Vprime = chooseVprime(G.vertices(), pPrime);
 
-            fileName = "Random n=" + n + " p=" + p + " p'=" + pPrime + ".txt";
+            fileName = "Random n=" + n + " p=" + p + " p'=" + pPrime;
+
+            if (args.length == 5) {
+                double pF = Double.parseDouble(args[4]); // probability for a vertex with deg+ < 2 to become final
+                P = computeP(G,pF);
+                fileName += " pF=" + pF;
+            }
+
+            fileName += ".txt";
         } else {
             int k = Integer.parseInt(args[1]);
 
@@ -36,7 +45,7 @@ public class GraphGenerator {
             Vprime = res.second;
             fileName = "WorstCase n=" + (2*k) + ".txt";
         }
-        String content = makeString(G,Vprime);
+        String content = makeString(G,Vprime,P);
         IOUtils.writeToFile(dataFolder, fileName, content);
     }
 
@@ -95,7 +104,18 @@ public class GraphGenerator {
         return Vprime;
     }
 
-    private static String makeString(Graph<Vertex> G, Set<Vertex> Vprime) {
+    private static Set<Vertex> computeP(Graph<Vertex> G, double pF) {
+        Set<Vertex> P = new HashSet<>();
+
+        for(Vertex v: G.vertices()) {
+            if (G.outgoing(v).size() == 2 || RANDOM.nextDouble() < pF) {
+                P.add(v);
+            }
+        }
+        return P;
+    }
+
+    private static String makeString(Graph<Vertex> G, Set<Vertex> Vprime, Set<Vertex> P) {
         List<Vertex> V = new ArrayList<>(G.vertices());
         V.sort(Comparator.comparingInt(Object::hashCode));
 
@@ -129,12 +149,22 @@ public class GraphGenerator {
         if (i != -1) {
             VprimeLine.replace(i,i+2, "");
         }
+        VprimeLine.append(System.lineSeparator());
         content.append(VprimeLine);
 
+        if (P != null) {
+            StringBuilder PLine = new StringBuilder();
+            PLine.append("P: ");
+            for(Vertex v: P) {
+                PLine.append(v.hashCode()).append(", ");
+            }
+            i = PLine.lastIndexOf(", ");
+            if (i != -1) {
+                PLine.replace(i,i+2, "");
+            }
+            content.append(PLine);
+        }
+
         return content.toString();
-    }
-
-    private static void writeToFolder(String dataFolder, Graph<Vertex> G, Set<Vertex> Vprime, Set<Vertex> P) {
-
     }
 }

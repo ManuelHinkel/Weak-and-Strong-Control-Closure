@@ -1,5 +1,6 @@
 package de.ControlClosure.DSCC;
 
+import de.ControlClosure.DSCC.Bernstein.HashList;
 import de.ControlClosure.Graph;
 import de.ControlClosure.SCC;
 import de.ControlClosure.Tarjan;
@@ -10,7 +11,7 @@ import java.util.*;
 public class TarjanDSCC implements DecrementalSCC {
     private static final Tarjan<Vertex> TARJAN = new Tarjan<>();
 
-    private List<SCC<Vertex>> sccs;
+    private HashList<SCC<Vertex>> sccs;
 
     private Graph<Vertex> G;
 
@@ -21,7 +22,8 @@ public class TarjanDSCC implements DecrementalSCC {
         this.G = G;
         sccMap = new HashMap<>();
 
-        sccs = TARJAN.run(G);
+        sccs = new HashList<>();
+        sccs.addAllLast(TARJAN.run(G));
         for(SCC<Vertex> scc: sccs) {
             for(Vertex v: scc.vertices()) {
                 sccMap.put(v, scc);
@@ -47,9 +49,7 @@ public class TarjanDSCC implements DecrementalSCC {
             }
         }
 
-        int index = sccs.indexOf(sccu);
-        sccs.remove(index);
-        sccs.addAll(index, newSCCs);
+        sccs.replace(sccu, newSCCs);
     }
 
     @Override
@@ -68,15 +68,15 @@ public class TarjanDSCC implements DecrementalSCC {
     }
 
     @Override
-    public List<SCC<Vertex>> SCCs() {
+    public HashList<SCC<Vertex>> SCCs() {
         return sccs;
     }
 
-    @Override
-    public SCC<Vertex> sigma(int index) {
-        assert index >= 0 && index < sccCount();
-        return sccs.get(index);
-    }
+//    @Override
+//    public SCC<Vertex> sigma(int index) {
+//        assert index >= 0 && index < sccCount();
+//        return sccs.get(index);
+//    }
 
     @Override
     public SCC<Vertex> scc(Vertex v) {
