@@ -6,16 +6,16 @@ mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
 nMin=250
-nMax=3001
+nMax=2501
 nStep=250
 
-pMin=0.50
+pMin=0.60
 pMax=0.91
 pStep=0.1
 
 pPMin=0.1
-pPMax=0.41
-pPStep=0.1
+pPMax=0.71
+pPStep=0.2
 
 for ((i=nMin; i<nMax; i+=nStep)); do
     for p in $(seq "$pMin" "$pStep" "$pMax"); do
