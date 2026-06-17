@@ -7,8 +7,8 @@ ALGORITHM="$2"
 files=("$DATA_DIR"/*)
 flags=("cubic" "quadratic" "polylog")
 
-group=$(( (SLURM_ARRAY_TASK_ID ) / 3 ))
-offset=$(( (SLURM_ARRAY_TASK_ID ) % 3 ))
+group=$(( (SLURM_ARRAY_TASK_ID -1) / 3 ))
+offset=$(( (SLURM_ARRAY_TASK_ID -1) % 3 ))
 
 if [ "$ALGORITHM"="w" ]; then
   java -cp ./../target/classes de.ControlClosure.Weak.Main  "${flags[offset]}" "${files[group]}"
