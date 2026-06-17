@@ -147,17 +147,17 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                     .stream()
                     .mapToInt(Integer::intValue)
                     .average()
-                    .orElse(-1));
+                    .orElse(0));
             statistics.setAvgNewSCCCount(newSCCCounts
                     .stream()
                     .mapToInt(Integer::intValue)
                     .average()
-                    .orElse(-1));
+                    .orElse(0));
             statistics.setAvgRatioLargestNewToCurrent(largestNewSCCToCurrentRatios
                     .stream()
                     .mapToDouble(Double::doubleValue)
                     .average()
-                    .orElse(-1));
+                    .orElse(0));
         }
 
         return X;

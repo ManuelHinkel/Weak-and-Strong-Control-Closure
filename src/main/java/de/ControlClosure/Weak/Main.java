@@ -7,6 +7,8 @@ import de.ControlClosure.DSCC.TarjanDSCC;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -27,27 +29,33 @@ public class Main {
         Graph<Vertex> G = parsed.first;
         Set<Vertex> Vprime = parsed.second.first;
 
-
         String algorithm = args[0];
-        WeakControlClosure wcc;
-        Statistics statistics;
-        switch (algorithm) {
-            case "cubic" -> {
-                wcc = new WCCCubic();
-                statistics = new Statistics(fileName, "Cubic");
+        List<Statistics> l = new ArrayList<>();
+        Statistics statistics = null;
+        for(int i = 0; i < 10; i++) {
+            WeakControlClosure wcc;
+            switch (algorithm) {
+                case "cubic" -> {
+                    wcc = new WCCCubic();
+                    statistics = new Statistics(fileName, "Cubic");
+                    wcc.wcc(G,Vprime, statistics);
+                    l.add(statistics);
+                }
+                case "quadratic" -> {
+                    wcc = new WCCDecrementalSCC(new TarjanDSCC());
+                    statistics = new DSCCStatistics(fileName, "Quadratic");
+                    wcc.wcc(G,Vprime, statistics);
+                    l.add(statistics);
+                }
+                case "polylog" -> {
+                    wcc = new WCCDecrementalSCC(new PolylogDSCC());
+                    statistics = new DSCCStatistics(fileName, "Polylog");
+                    wcc.wcc(G,Vprime, statistics);
+                    l.add(statistics);
+                }
+                default -> throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] !");
             }
-            case "quadratic" -> {
-                wcc = new WCCDecrementalSCC(new TarjanDSCC());
-                statistics = new DSCCStatistics(fileName, "Quadratic");
-            }
-            case "polylog" -> {
-                wcc = new WCCDecrementalSCC(new PolylogDSCC());
-                statistics = new DSCCStatistics(fileName, "Polylog");
-            }
-            default -> throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] !");
         }
-
-        wcc.wcc(G,Vprime,statistics);
-        System.out.println(statistics);
+        System.out.println(statistics.average(l));
     }
 }

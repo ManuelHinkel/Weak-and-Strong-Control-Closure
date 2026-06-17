@@ -1,5 +1,7 @@
 package de.ControlClosure;
 
+import java.util.List;
+
 public class Statistics {
     protected String file;
     protected String algorithm;
@@ -27,5 +29,27 @@ public class Statistics {
     @Override
     public String toString() {
         return file + ", " + algorithm + ", " + numVertices + ", " + numEdges + ", " + runningTimeMS;
+    }
+
+    public Statistics average(List<Statistics> statisticsList) {
+        String file = statisticsList.get(0).file;
+        String algo = statisticsList.get(0).algorithm;
+
+        int sumV=0;
+        int sumE=0;
+        long sumTime=0;
+
+        for(Statistics s: statisticsList) {
+            sumV += s.numVertices;
+            sumE += s.numEdges;
+            sumTime += s.runningTimeMS;
+        }
+
+        Statistics average = new Statistics(file,algo);
+        average.numVertices = sumV / statisticsList.size();
+        average.numEdges = sumE / statisticsList.size();
+        average.runningTimeMS = sumTime / statisticsList.size();
+
+        return average;
     }
 }
