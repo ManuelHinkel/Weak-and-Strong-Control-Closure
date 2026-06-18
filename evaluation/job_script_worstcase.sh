@@ -8,4 +8,4 @@ flags=("quadratic" "polylog")
 group=$(( (SLURM_ARRAY_TASK_ID -1) / 2 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 2 ))
 
-java -cp ./../target/classes de.ControlClosure.Weak.Main  "${flags[offset]}" "${files[group]}" "1" "w" ""
+java -cp ./../target/classes de.ControlClosure.Main  "${flags[offset]}" "${files[group]}" "1" "w" ""
