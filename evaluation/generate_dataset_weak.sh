@@ -11,11 +11,11 @@ nStep=250
 
 pMin=0.60
 pMax=0.91
-pStep=0.1
+pStep=0.15
 
 pPMin=0.1
 pPMax=0.71
-pPStep=0.2
+pPStep=0.3
 
 for ((i=nMin; i<nMax; i+=nStep)); do
     for p in $(seq "$pMin" "$pStep" "$pMax"); do

@@ -168,14 +168,6 @@ public class GESTree <T extends Vertex>{
     }
 
     protected int w(T u, T v) {
-        if (!G.outgoing(u).contains(v)) {
-            System.out.println(u);
-            System.out.println(v);
-            System.out.println(G.outgoing(u));
-            System.out.println(G.incoming(v));
-            System.out.println(G.outgoingNSL(u));
-            System.out.println(G.incomingNSL(v));
-        }
         assert G.outgoing(u).contains(v);
         return S.contains(u) ? 1 : 0;
     }

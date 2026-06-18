@@ -185,7 +185,6 @@ public class PolylogDSCC implements DecrementalSCC {
             Map<Vertex, Node> SCCip1 = vertexNodeMaps.get(i+1);
             Node X = SCCip1.get(u);
             if (X.equals(SCCip1.get(v))) {
-                GESTree<Node> E = gesTreeM.get(X);
                 gesTreeM.get(X).delete(Xu, Xv);
             }
 
@@ -310,7 +309,7 @@ public class PolylogDSCC implements DecrementalSCC {
                 if(i+1 < alpha) {
                     Eip2.augment(SAugNodes);
                 }
-                separators.get(i+1).addAll(SAug);
+                separators.get(i+1).addAll(SAugNodes);
             }
 
             assert mappingsCorrect(i+1);
@@ -475,13 +474,9 @@ public class PolylogDSCC implements DecrementalSCC {
                 if (hasEdgeToY) {
                     // Add Z before Y
                     sccs.insertBefore(Y,Z);
-//                    int i = sccs.indexOf(Y);
-//                    sccs.add(i, Z);
                 } else {
                     // Add Z after Y
                     sccs.insertAfter(Y,Z);
-//                    int i = sccs.indexOf(Y);
-//                    sccs.add(i+1, Z);
                 }
             }
             return Z;
@@ -507,12 +502,6 @@ public class PolylogDSCC implements DecrementalSCC {
     public HashList<SCC<Vertex>> SCCs() {
         return sccs;
     }
-
-//    @Override
-//    public SCC<Vertex> sigma(int index) {
-//        assert index >= 0 && index < sccCount();
-//        return sccs.get(index);
-//    }
 
     @Override
     public SCC<Vertex> scc(Vertex v) {

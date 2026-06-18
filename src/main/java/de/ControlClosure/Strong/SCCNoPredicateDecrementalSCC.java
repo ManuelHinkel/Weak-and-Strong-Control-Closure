@@ -106,4 +106,9 @@ public class SCCNoPredicateDecrementalSCC implements StrongControlClosureNoPredi
         }
         return X;
     }
+
+    @Override
+    public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P, DSCCStatistics statistics) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -9,12 +9,6 @@ import java.util.*;
 public class SCCDecrementalSCC implements StrongControlClosure{
     private final DecrementalSCC dscc;
 
-    // Statistics
-    private DSCCStatistics statistics = null;
-    private List<Integer> sccSizes;
-    private List<Integer> newSCCCounts;
-    private List<Double> largestNewSCCToCurrentRatios;
-
     public SCCDecrementalSCC(DecrementalSCC dscc) {
         this.dscc = dscc;
     }
@@ -22,10 +16,107 @@ public class SCCDecrementalSCC implements StrongControlClosure{
 
     @Override
     public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P) {
+        Map<SCC<Vertex>, Set<Vertex>> ThetaHat = new HashMap<>();
+        Map<SCC<Vertex>, Set<Vertex>> Boundary = new HashMap<>();
+        Map<SCC<Vertex>, Set<Vertex>> CompletePath = new HashMap<>();
+
+        Set<Vertex> X = new HashSet<>(Vp);
+
+        Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
+
+        // TODO: inti on graph withotu edges
+        dscc.initialize(H);
+        dscc.delete(Vp);
+
+        SCC<Vertex> lastMoved = null;
+        SCC<Vertex> scc;
+        while ((scc = dscc.SCCs().prev(lastMoved)) != null){
+            Set<Vertex> ThetaHatSCC = ThetaHat.getOrDefault(scc,new HashSet<>());
+
+            // Currently ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc), which means for a single-vertex SCC that
+            // contains a vertex in X it is empty, which means we do not need to test and exclude this case to avoid
+            // adding a single vertex multiple times to X
+            if (ThetaHatSCC.size() >= 2
+                    || (ThetaHatSCC.size() == 1 && !CompletePath.getOrDefault(scc,new HashSet<>()).isEmpty()) // direct complete paths
+                    || (ThetaHatSCC.size() == 1 && scc.size() > 1) // complete path, bc on cycle
+                    || (ThetaHatSCC.size() == 1 && GraphUtils.isFinal(SetUtils.getFirst(Boundary.get(scc)), P, G)) // incomplete predicate
+                    || (ThetaHatSCC.size() == 1 && GraphUtils.hasSelfLoop(SetUtils.getFirst(Boundary.get(scc)), G)) ) // complete path, bc incomplete predicate
+            { // O(1)
+                Set<Vertex> B = Boundary.get(scc); // always exists O(1)
+                Set<Vertex> C = CompletePath.getOrDefault(scc,new HashSet<>()); // O(1)
+
+                assert Collections.disjoint(X,B);
+                assert Collections.disjoint(X,C);
+
+                X.addAll(B);    // O(X) in total
+                X.addAll(C);    // O(X) in total
+
+                dscc.delete(B); // O(T(n)) in total
+                dscc.delete(C); // O(T(n)) in total
+
+                // Ensure that it is empty because DSCC might reuse same SCC object
+                ThetaHat.put(scc, new HashSet<>());
+                Boundary.put(scc, new HashSet<>());
+                CompletePath.put(scc, new HashSet<>());
+            } else { // Propagate (move from L to R)
+                // Currently, ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc)
+                if (scc.size() == 1 && X.contains(scc.first())) {
+                    ThetaHat.put(scc, new LinkedHashSet<>(List.of(scc.first())));
+                }
+                // Now it stores \hat{\Theta}(R,X,scc), which equals \hat{\Theta}(X',scc), and more importantly,
+                // needs to be propagated
+
+                if (!ThetaHat.getOrDefault(scc, new HashSet<>()).isEmpty()) { // O(1)
+                    // O(E^in(\sigma(i)))
+                    for(Vertex v: scc.vertices()) {
+                        for(Vertex u: H.incoming(v)) {
+                            SCC<Vertex> sccInc = dscc.scc(u); // O(1)
+                            if (!scc.equals(sccInc)) { // O(1)
+                                // O(1)
+                                if (!Boundary.containsKey(sccInc)) {
+                                    Boundary.put(sccInc, new LinkedHashSet<>());
+                                }
+                                Boundary.get(sccInc).add(u);
+
+                                // O(1)
+                                if(!ThetaHat.containsKey(sccInc)) {
+                                    ThetaHat.put(sccInc, new LinkedHashSet<>());
+                                }
+                                ThetaHat.get(sccInc).addAll(ThetaHat.get(scc)); // In practice only adds one
+                            }
+                        }
+                    }
+                }
+
+                if (scc.size() > 1
+                        || !CompletePath.getOrDefault(scc,new HashSet<>()).isEmpty()
+                        || (GraphUtils.hasSelfLoop(scc.first(),H)) // In H, vertices in X cannot have selfloops
+                        || (!X.contains(scc.first()) && GraphUtils.isFinal(scc.first(), P, G))) {
+                    for(Vertex v: scc.vertices()) {
+                        for(Vertex u: H.incoming(v)) {
+                            SCC<Vertex> sccInc = dscc.scc(u); // O(1)
+                            if (!scc.equals(sccInc)) { // O(1)
+                                // O(1)
+                                if (!CompletePath.containsKey(sccInc)) {
+                                    CompletePath.put(sccInc, new LinkedHashSet<>());
+                                }
+                                CompletePath.get(sccInc).add(u);
+                            }
+                        }
+                    }
+                }
+                lastMoved=scc;
+            }
+        }
+        return X;
+    }
+
+    @Override
+    public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P, DSCCStatistics statistics) {
         // Statistics
-        sccSizes = new ArrayList<>();
-        newSCCCounts = new ArrayList<>();
-        largestNewSCCToCurrentRatios = new ArrayList<>();
+        List<Integer> sccSizes = new ArrayList<>();
+        List<Integer> newSCCCounts = new ArrayList<>();
+        List<Double> largestNewSCCToCurrentRatios = new ArrayList<>();
 
         Map<SCC<Vertex>, Set<Vertex>> ThetaHat = new HashMap<>();
         Map<SCC<Vertex>, Set<Vertex>> Boundary = new HashMap<>();
@@ -49,10 +140,10 @@ public class SCCDecrementalSCC implements StrongControlClosure{
             // contains a vertex in X it is empty, which means we do not need to test and exclude this case to avoid
             // adding a single vertex multiple times to X
             if (ThetaHatSCC.size() >= 2
-                || (ThetaHatSCC.size() == 1 && !CompletePath.getOrDefault(scc,new HashSet<>()).isEmpty()) // direct complete paths
-                || (ThetaHatSCC.size() == 1 && scc.size() > 1) // complete path, bc on cycle
-                || (ThetaHatSCC.size() == 1 && GraphUtils.isFinal(SetUtils.getFirst(Boundary.get(scc)), P, G)) // incomplete predicate
-                || (ThetaHatSCC.size() == 1 && GraphUtils.hasSelfLoop(SetUtils.getFirst(Boundary.get(scc)), G)) ) // complete path, bc incomplete predicate
+                    || (ThetaHatSCC.size() == 1 && !CompletePath.getOrDefault(scc,new HashSet<>()).isEmpty()) // direct complete paths
+                    || (ThetaHatSCC.size() == 1 && scc.size() > 1) // complete path, bc on cycle
+                    || (ThetaHatSCC.size() == 1 && GraphUtils.isFinal(SetUtils.getFirst(Boundary.get(scc)), P, G)) // incomplete predicate
+                    || (ThetaHatSCC.size() == 1 && GraphUtils.hasSelfLoop(SetUtils.getFirst(Boundary.get(scc)), G)) ) // complete path, bc incomplete predicate
             { // O(1)
                 Set<Vertex> B = Boundary.get(scc); // always exists O(1)
                 Set<Vertex> C = CompletePath.getOrDefault(scc,new HashSet<>()); // O(1)
@@ -161,14 +252,5 @@ public class SCCDecrementalSCC implements StrongControlClosure{
         }
 
         return X;
-    }
-
-    @Override
-    public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P, Statistics statistics) {
-        if (statistics instanceof DSCCStatistics) {
-            this.statistics = (DSCCStatistics) statistics;
-        }
-
-        return StrongControlClosure.super.scc(G,Vp,P,statistics);
     }
 }

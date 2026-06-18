@@ -1,14 +1,8 @@
 package de.ControlClosure;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class GraphGenerator {
-    private static final Random RANDOM = new Random();
-
     public static void main(String[] args) {
         if (args.length != 4 && args.length != 5 && args.length != 2) {
             throw new IllegalArgumentException("Expected arguments: [folder] [n] [p] [p'] <pF> or [folder] [k]!");
@@ -20,23 +14,28 @@ public class GraphGenerator {
         Set<Vertex> Vprime;
         Set<Vertex> P = null;
         String fileName;
+        String content;
         if (args.length == 4 || args.length == 5) {
+            StringBuilder contentSB = new StringBuilder();
             int n = Integer.parseInt(args[1]);
             double p = Double.parseDouble(args[2]);
             double pPrime = Double.parseDouble(args[3]);
 
-            G = randomCFG(n, p);
-            Vprime = chooseVprime(G.vertices(), pPrime);
-
             fileName = "Random n=" + n + " p=" + p + " p'=" + pPrime;
+            contentSB
+                    .append("seed=").append(new Random().nextInt(Integer.MAX_VALUE)).append(System.lineSeparator())
+                    .append("n=").append(n).append(System.lineSeparator())
+                    .append("p=").append(p).append(System.lineSeparator())
+                    .append("p'=").append(pPrime).append(System.lineSeparator());
 
             if (args.length == 5) {
                 double pF = Double.parseDouble(args[4]); // probability for a vertex with deg+ < 2 to become final
-                P = computeP(G,pF);
                 fileName += " pF=" + pF;
+                contentSB.append("pF=").append(pF);
             }
 
             fileName += ".txt";
+            content = contentSB.toString();
         } else {
             int k = Integer.parseInt(args[1]);
 
@@ -44,13 +43,13 @@ public class GraphGenerator {
             G = res.first;
             Vprime = res.second;
             fileName = "WorstCase n=" + (2*k) + ".txt";
+            content = makeString(G,Vprime,P);
         }
-        String content = makeString(G,Vprime,P);
         IOUtils.writeToFile(dataFolder, fileName, content);
     }
 
 
-    private static Graph<Vertex> randomCFG(int n, double pEdge) {
+    public static Graph<Vertex> randomCFG(int n, double pEdge, Random r) {
         Vertex[] V = new Vertex[n];
         for(int i = 0; i < n; i++) {
             V[i] = new Vertex();
@@ -60,14 +59,14 @@ public class GraphGenerator {
         for(int i = 0; i < n; i++) {
             List<Vertex> adj = new ArrayList<>();
 
-            if (RANDOM.nextDouble() < pEdge) {
-                adj.add(V[RANDOM.nextInt(n)]);
+            if (r.nextDouble() < pEdge) {
+                adj.add(V[r.nextInt(n)]);
             }
 
-            if (RANDOM.nextDouble() < pEdge) {
+            if (r.nextDouble() < pEdge) {
                 Vertex t;
                 do {
-                    t = V[RANDOM.nextInt(n)];
+                    t = V[r.nextInt(n)];
                 } while (adj.contains(t));
                 adj.add(t);
             }
@@ -94,21 +93,21 @@ public class GraphGenerator {
         return new Tuple<>(new Graph<>(G), new HashSet<>(List.of(V[2*k-2],V[2*k-1])));
     }
 
-    private static Set<Vertex> chooseVprime(Set<Vertex> V, double p) {
+    public static Set<Vertex> chooseVprime(Set<Vertex> V, double pPrime, Random r) {
         Set<Vertex> Vprime = new HashSet<>();
         for(Vertex v: V) {
-            if (RANDOM.nextDouble() < p) {
+            if (r.nextDouble() < pPrime) {
                 Vprime.add(v);
             }
         }
         return Vprime;
     }
 
-    private static Set<Vertex> computeP(Graph<Vertex> G, double pF) {
+    public static Set<Vertex> computeP(Graph<Vertex> G, double pF, Random r) {
         Set<Vertex> P = new HashSet<>();
 
         for(Vertex v: G.vertices()) {
-            if (G.outgoing(v).size() == 2 || RANDOM.nextDouble() < pF) {
+            if (G.outgoing(v).size() == 2 || r.nextDouble() < pF) {
                 P.add(v);
             }
         }

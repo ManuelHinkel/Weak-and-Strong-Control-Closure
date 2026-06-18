@@ -1,12 +1,11 @@
 package de.ControlClosure;
 
-import java.util.Iterator;
 import java.util.Set;
 
-public abstract class SCC<T> extends Vertex {
+public class SCC<T> extends Vertex {
     protected final Set<T> vertices;
 
-    protected SCC(Set<T> vertices) {
+    public SCC(Set<T> vertices) {
         super();
         assert !vertices.isEmpty();
         this.vertices = vertices;

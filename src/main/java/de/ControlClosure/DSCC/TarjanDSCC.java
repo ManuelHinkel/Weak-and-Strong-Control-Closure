@@ -1,15 +1,12 @@
 package de.ControlClosure.DSCC;
 
+import de.ControlClosure.*;
 import de.ControlClosure.DSCC.Bernstein.HashList;
-import de.ControlClosure.Graph;
-import de.ControlClosure.SCC;
-import de.ControlClosure.Tarjan;
-import de.ControlClosure.Vertex;
 
 import java.util.*;
 
 public class TarjanDSCC implements DecrementalSCC {
-    private static final Tarjan<Vertex> TARJAN = new Tarjan<>();
+    private static final Tarjan<Vertex> TARJAN = new TarjanIterative<>();
 
     private HashList<SCC<Vertex>> sccs;
 
@@ -71,12 +68,6 @@ public class TarjanDSCC implements DecrementalSCC {
     public HashList<SCC<Vertex>> SCCs() {
         return sccs;
     }
-
-//    @Override
-//    public SCC<Vertex> sigma(int index) {
-//        assert index >= 0 && index < sccCount();
-//        return sccs.get(index);
-//    }
 
     @Override
     public SCC<Vertex> scc(Vertex v) {

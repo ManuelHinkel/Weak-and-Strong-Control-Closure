@@ -1,5 +1,6 @@
 package de.ControlClosure.Strong;
 
+import de.ControlClosure.DSCCStatistics;
 import de.ControlClosure.Graph;
 import de.ControlClosure.GraphUtils;
 import de.ControlClosure.Vertex;
@@ -41,5 +42,10 @@ public class SCCCubic implements StrongControlClosureNoPredicate{
         }
 
         return X;
+    }
+
+    @Override
+    public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P, DSCCStatistics statistics) {
+        throw new UnsupportedOperationException();
     }
 }

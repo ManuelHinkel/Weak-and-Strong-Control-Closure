@@ -9,13 +9,13 @@ nMin=250
 nMax=2501
 nStep=250
 
-pMin=0.70
+pMin=0.60
 pMax=0.91
-pStep=0.1
+pStep=0.15
 
 pPMin=0.1
 pPMax=0.71
-pPStep=0.2
+pPStep=0.3
 
 pFMin=0.1
 pFMax=0.51

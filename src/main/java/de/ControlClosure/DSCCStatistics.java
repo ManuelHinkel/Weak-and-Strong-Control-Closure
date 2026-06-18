@@ -29,12 +29,10 @@ public class DSCCStatistics extends Statistics{
     }
 
     @Override
-    public Statistics average(List<Statistics> statisticsList) {
+    public Statistics averageRunTime(List<Statistics> statisticsList) {
         String file = statisticsList.get(0).file;
         String algo = statisticsList.get(0).algorithm;
 
-        int sumV=0;
-        int sumE=0;
         long sumTime=0;
         double sumSize=0;
         double sumNew=0;
@@ -42,8 +40,6 @@ public class DSCCStatistics extends Statistics{
 
         for(Statistics s: statisticsList) {
             DSCCStatistics ds = (DSCCStatistics)s;
-            sumV += s.numVertices;
-            sumE += s.numEdges;
             sumTime += s.runningTimeMS;
             sumSize += ds.avgSCCSize;
             sumNew += ds.avgNewSCCCount;
@@ -51,12 +47,16 @@ public class DSCCStatistics extends Statistics{
         }
 
         DSCCStatistics average = new DSCCStatistics(file,algo);
-        average.numVertices = sumV / statisticsList.size();
-        average.numEdges = sumE / statisticsList.size();
+        average.numVertices = statisticsList.get(0).numVertices;
+        average.numEdges = statisticsList.get(0).numEdges;
+        average.p = statisticsList.get(0).p;
+        average.pPrime = statisticsList.get(0).pPrime;
+        average.pF = statisticsList.get(0).pF;
         average.runningTimeMS = sumTime / statisticsList.size();
         average.avgSCCSize = sumSize / statisticsList.size();
         average.avgNewSCCCount = sumNew / statisticsList.size();
         average.avgRatio = sumRatio / statisticsList.size();
+        average.numRuns = statisticsList.size();
 
         return average;
     }

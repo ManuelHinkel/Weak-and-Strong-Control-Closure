@@ -9,6 +9,12 @@ public class Statistics {
     protected int numVertices;
     protected int numEdges;
 
+    protected int numRuns = 1;
+
+    protected double p;
+    protected double pPrime;
+    protected double pF;
+
     public Statistics(String file, String algorithm) {
         this.file = file;
         this.algorithm = algorithm;
@@ -26,29 +32,49 @@ public class Statistics {
         this.runningTimeMS = runningTimeMS;
     }
 
-    @Override
-    public String toString() {
-        return file + ", " + algorithm + ", " + numVertices + ", " + numEdges + ", " + runningTimeMS;
+    public void setP(double p) {
+        this.p = p;
     }
 
-    public Statistics average(List<Statistics> statisticsList) {
+    public void setPPrime(double pPrime) {
+        this.pPrime = pPrime;
+    }
+
+    public void setPF(double pF) {
+        this.pF = pF;
+    }
+
+    @Override
+    public String toString() {
+        return file + ", "
+                + algorithm + ", "
+                + numRuns + ", "
+                + numVertices + ", "
+                + numEdges + ", "
+                + runningTimeMS + ", "
+                + p + ", "
+                + pPrime + ", "
+                + pF;
+    }
+
+    public Statistics averageRunTime(List<Statistics> statisticsList) {
         String file = statisticsList.get(0).file;
         String algo = statisticsList.get(0).algorithm;
 
-        int sumV=0;
-        int sumE=0;
         long sumTime=0;
 
         for(Statistics s: statisticsList) {
-            sumV += s.numVertices;
-            sumE += s.numEdges;
             sumTime += s.runningTimeMS;
         }
 
         Statistics average = new Statistics(file,algo);
-        average.numVertices = sumV / statisticsList.size();
-        average.numEdges = sumE / statisticsList.size();
         average.runningTimeMS = sumTime / statisticsList.size();
+        average.numVertices = statisticsList.get(0).numVertices;
+        average.numEdges = statisticsList.get(0).numEdges;
+        average.p = statisticsList.get(0).p;
+        average.pPrime = statisticsList.get(0).pPrime;
+        average.pF = statisticsList.get(0).pF;
+        average.numRuns = statisticsList.size();
 
         return average;
     }

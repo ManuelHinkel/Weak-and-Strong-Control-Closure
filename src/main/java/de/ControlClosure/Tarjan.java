@@ -3,15 +3,15 @@ package de.ControlClosure;
 import java.util.*;
 
 public class Tarjan<T> {
-    private int currentIndex = 0;
+    protected int currentIndex = 0;
 
-    private Map<T, Integer> number;
-    private Map<T, Integer> lowLink;
-    private Deque<T> stack ;
-    private Map<T, Boolean> onStack;
-    private List<SCC<T>> stronglyConnectedComponents;
+    protected Map<T, Integer> number;
+    protected Map<T, Integer> lowLink;
+    protected Deque<T> stack ;
+    protected Map<T, Boolean> onStack;
+    protected List<SCC<T>> stronglyConnectedComponents;
 
-    private Graph<T> graph;
+    protected Graph<T> graph;
 
     public List<SCC<T>> run(Graph<T> G) {
         currentIndex = 0;
@@ -26,7 +26,6 @@ public class Tarjan<T> {
             if (!number.containsKey(v)) {
                 strongConnect(v);
             }
-            // TODO: check if needed
             stack.clear();
             onStack.clear();
         }
@@ -64,13 +63,7 @@ public class Tarjan<T> {
                 scc.add(w);
             }
 
-            stronglyConnectedComponents.add(/*stronglyConnectedComponents.size()*/0,new SetSCC(scc));
-        }
-    }
-
-    public class SetSCC extends SCC<T> {
-        public SetSCC(Set<T> vertices){
-            super(vertices);
+            stronglyConnectedComponents.add(0,new SCC<>(scc));
         }
     }
 }

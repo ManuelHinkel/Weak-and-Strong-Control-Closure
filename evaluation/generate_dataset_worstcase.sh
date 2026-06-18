@@ -5,9 +5,9 @@ OUT_DIR="data_worstcase"
 mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
-kMin=50
-kMax=51
-kStep=100
+kMin=1000
+kMax=20001
+kStep=1000
 
 
 for ((k=kMin; k<kMax; k+=kStep)); do

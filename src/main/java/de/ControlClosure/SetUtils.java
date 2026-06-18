@@ -20,16 +20,8 @@ public class SetUtils {
         return true;
     }
 
-    public static <T> boolean noIntersection(Set<T> a, Set<T> b) {
-        Set<T> set = new HashSet<>(a);
-        set.retainAll(b);
-        return set.isEmpty();
-    }
-
-    public static int seed = new Random().nextInt(10000);
-
     public static <V> V pickRandom(Set<V> vertices) {
-        Random r = new Random(4845);
+        Random r = new Random();
         int index = r.nextInt(vertices.size());
 
         int i = 0;

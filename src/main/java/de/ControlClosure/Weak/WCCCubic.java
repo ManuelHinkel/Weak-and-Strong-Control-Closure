@@ -36,4 +36,9 @@ public class WCCCubic implements WeakControlClosure{
 
         return X;
     }
+
+    @Override
+    public Set<Vertex> wcc(Graph<Vertex> G, Set<Vertex> Vp, DSCCStatistics statistics) {
+        throw new UnsupportedOperationException();
+    }
 }

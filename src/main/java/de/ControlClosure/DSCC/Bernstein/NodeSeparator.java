@@ -13,14 +13,6 @@ public class NodeSeparator extends Separator<Node>{
         super(new LinkedHashSet<>());
     }
 
-    public NodeSeparator(Set<Node> S) {
-        super(S);
-        for(Node n: S) {
-            assert n.size() == 1;
-            verticesInNodes.add(n.first());
-        }
-    }
-
     @Override
     public void add(Node s) {
         assert s.size() == 1;
