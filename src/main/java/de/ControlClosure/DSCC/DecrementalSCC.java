@@ -1,7 +1,7 @@
 package de.ControlClosure.DSCC;
 
-import de.ControlClosure.DSCC.Bernstein.HashList;
 import de.ControlClosure.Graph;
+import de.ControlClosure.HashList;
 import de.ControlClosure.SCC;
 import de.ControlClosure.Vertex;
 

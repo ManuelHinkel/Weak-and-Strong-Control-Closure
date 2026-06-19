@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        assert false; // Test if Assertions are disabled
+        //assert false; // Test if Assertions are disabled
         if (args.length != 5) {
             throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] [file] [repetitions] [w|s] [scc]!");
         }
@@ -38,7 +38,7 @@ public class Main {
             int n = Integer.parseInt(lines[1].split("=",2)[1]);
             double p = Double.parseDouble(lines[2].split("=",2)[1]);
             double pPrime = Double.parseDouble(lines[3].split("=",2)[1]);
-            double pF = lines.length > 4 ? Double.parseDouble(lines[4].split("=",2)[1]) : 0.0;
+            double pF = Double.parseDouble(lines[4].split("=",2)[1]);
 
             runRandomGraph(fileName,seed,n,p,pPrime,pF,repetitions,algorithm,weak,sccStats);
         } else { // Parse Graph

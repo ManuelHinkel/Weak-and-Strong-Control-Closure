@@ -2,6 +2,7 @@
 
 DATA_DIR="$1"
 ALGORITHM="$2"
+FLAG="$3"
 
 files=("$DATA_DIR"/*)
 flags=("quadratic" "polylog")
@@ -9,5 +10,5 @@ flags=("quadratic" "polylog")
 group=$(( (SLURM_ARRAY_TASK_ID -1) / 2 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 2 ))
 
-java -cp ./../target/classes de.ControlClosure.Main  "${flags[offset]}" "${files[group]}" "5" "${ALGORITHM}" "scc"
+java -cp ./../target/classes de.ControlClosure.Main  "${flags[offset]}" "${files[group]}" "5" "$ALGORITHM" "$FLAG"
 

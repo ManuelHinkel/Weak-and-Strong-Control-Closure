@@ -1,4 +1,4 @@
-package de.ControlClosure.DSCC.Bernstein;
+package de.ControlClosure;
 
 import java.util.*;
 
@@ -14,18 +14,42 @@ public class HashList<T> implements Iterable<T>  {
         }
     }
 
-    private final Map<T, Node<T>> nodeMap = new HashMap<>();
+    private final Map<T, Stack<Node<T>>> nodeMap = new HashMap<>();
     private Node<T> head;
     private Node<T> tail;
 
+
+    private void put(T value, Node<T> node) {
+        if (!nodeMap.containsKey(value)) {
+            nodeMap.put(value, new Stack<>());
+        }
+        nodeMap.get(value).add(node);
+    }
+
+    private void removeN(T value) {
+        nodeMap.get(value).pop();
+        if (nodeMap.get(value).isEmpty()) nodeMap.remove(value);
+    }
+
+    private Node<T> get(T value) {
+        return nodeMap.get(value).peek();
+    }
 
     public int size() {
         return nodeMap.size();
     }
 
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    public boolean contains(T value) {
+        return nodeMap.containsKey(value);
+    }
+
     public void addLast(T value) {
         Node<T> node = new Node<>(value);
-        nodeMap.put(value, node);
+        put(value, node);
 
         if (head == null) {
             head = tail = node;
@@ -39,7 +63,7 @@ public class HashList<T> implements Iterable<T>  {
 
     public void addFirst(T value) {
         Node<T> node = new Node<>(value);
-        nodeMap.put(value, node);
+        put(value, node);
 
         if (head == null) {
             head = tail = node;
@@ -51,7 +75,7 @@ public class HashList<T> implements Iterable<T>  {
         head = node;
     }
 
-    public void addAllLast(List<T> values) {
+    public void addAllLast(Iterable<T> values) {
         for(T value: values) {
             addLast(value);
         }
@@ -66,11 +90,10 @@ public class HashList<T> implements Iterable<T>  {
     }
 
     public void insertAfter(T target, T value) {
-        Node<T> current = nodeMap.get(target);
-        if (current == null) return;
+        Node<T> current = get(target);
 
         Node<T> node = new Node<>(value);
-        nodeMap.put(value, node);
+        put(value, node);
 
         node.prev = current;
         node.next = current.next;
@@ -85,11 +108,10 @@ public class HashList<T> implements Iterable<T>  {
     }
 
     public void insertBefore(T target, T value) {
-        Node<T> current = nodeMap.get(target);
-        if (current == null) return;
+        Node<T> current = get(target);
 
         Node<T> node = new Node<>(value);
-        nodeMap.put(value, node);
+        put(value, node);
 
         node.next = current;
         node.prev = current.prev;
@@ -104,7 +126,7 @@ public class HashList<T> implements Iterable<T>  {
     }
 
     public void remove(T value) {
-        Node<T> node = nodeMap.get(value);
+        Node<T> node = get(value);
         if (node == null) return;
 
         if (node.prev != null) {
@@ -119,14 +141,14 @@ public class HashList<T> implements Iterable<T>  {
             tail = node.prev;
         }
 
-        nodeMap.remove(value);
+        removeN(value);
         // Help GC
         node.next = null;
         node.prev = null;
     }
 
     public void replace(T target, List<T> values) {
-        Node<T> nodeToReplace = nodeMap.get(target);
+        Node<T> nodeToReplace = get(target);
         Node<T> prev = nodeToReplace.prev;
         remove(target);
 
@@ -143,7 +165,7 @@ public class HashList<T> implements Iterable<T>  {
     public T prev(T current) {
         if (current == null) return tail.value;
 
-        Node<T> node = nodeMap.get(current);
+        Node<T> node = get(current);
         Node<T> prev = node.prev;
 
         if (prev == null) return null;

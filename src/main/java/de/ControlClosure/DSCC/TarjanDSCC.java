@@ -1,7 +1,6 @@
 package de.ControlClosure.DSCC;
 
 import de.ControlClosure.*;
-import de.ControlClosure.DSCC.Bernstein.HashList;
 
 import java.util.*;
 

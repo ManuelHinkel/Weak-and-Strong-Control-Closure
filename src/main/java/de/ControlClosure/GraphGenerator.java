@@ -4,8 +4,8 @@ import java.util.*;
 
 public class GraphGenerator {
     public static void main(String[] args) {
-        if (args.length != 4 && args.length != 5 && args.length != 2) {
-            throw new IllegalArgumentException("Expected arguments: [folder] [n] [p] [p'] <pF> or [folder] [k]!");
+        if (args.length != 5 && args.length != 2) {
+            throw new IllegalArgumentException("Expected arguments: [folder] [n] [p] [p'] [pF] or [folder] [k]!");
         }
 
         String dataFolder = args[0];
@@ -15,26 +15,21 @@ public class GraphGenerator {
         Set<Vertex> P = null;
         String fileName;
         String content;
-        if (args.length == 4 || args.length == 5) {
+        if (args.length == 5) {
             StringBuilder contentSB = new StringBuilder();
             int n = Integer.parseInt(args[1]);
             double p = Double.parseDouble(args[2]);
             double pPrime = Double.parseDouble(args[3]);
+            double pF = Double.parseDouble(args[4]); // probability for a vertex with deg+ < 2 to become final
 
-            fileName = "Random n=" + n + " p=" + p + " p'=" + pPrime;
+            fileName = "Random n=" + n + " p=" + p + " p'=" + pPrime + " pF=" + pF + ".txt";
             contentSB
                     .append("seed=").append(new Random().nextInt(Integer.MAX_VALUE)).append(System.lineSeparator())
                     .append("n=").append(n).append(System.lineSeparator())
                     .append("p=").append(p).append(System.lineSeparator())
-                    .append("p'=").append(pPrime).append(System.lineSeparator());
+                    .append("p'=").append(pPrime).append(System.lineSeparator())
+                    .append("pF=").append(pF);
 
-            if (args.length == 5) {
-                double pF = Double.parseDouble(args[4]); // probability for a vertex with deg+ < 2 to become final
-                fileName += " pF=" + pF;
-                contentSB.append("pF=").append(pF);
-            }
-
-            fileName += ".txt";
             content = contentSB.toString();
         } else {
             int k = Integer.parseInt(args[1]);

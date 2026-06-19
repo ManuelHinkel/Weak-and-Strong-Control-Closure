@@ -19,10 +19,10 @@ public class MainTest {
 
     @Test
     public void testStrong() {
-        File directory = new File("./evaluation/data_strong");
+        File directory = new File("./evaluation/data_strong_all");
 
         for (File file : directory.listFiles()) {
-            for(String algo: new String[]{"cubic", "quadratic", "polylog"}) {
+            for(String algo: new String[]{/*"cubic",*/ "quadratic", "polylog"}) {
                 Main.main(new String[]{algo, file.getAbsolutePath(), "1", "s", ""});
                 Vertex.resetID();
             }
