@@ -13,7 +13,7 @@ mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
 nMin=250
-nMax=751
+nMax=2501
 nStep=250
 
 pMin=0.60

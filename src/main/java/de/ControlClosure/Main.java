@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        //assert false; // Test if Assertions are disabled
+        assert false; // Test if Assertions are disabled
         if (args.length != 5) {
             throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] [file] [repetitions] [w|s] [scc]!");
         }

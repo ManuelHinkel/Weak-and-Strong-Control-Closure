@@ -3,41 +3,8 @@ package de.ControlClosure;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class IOUtils {
-    public static void main(String[] args) {
-        if (args.length != 2) throw new IllegalArgumentException("Expected [path to individual results] [folder for combined results]!");
-
-        String sourceFolder = args[0];
-        String outputFolder = args[1];
-
-        combineCSVFiles(sourceFolder, outputFolder);
-    }
-
-    public static void combineCSVFiles(String sourceFolder, String outputFolder) {
-        try {
-            Path sourcePath = Paths.get(sourceFolder);
-            List<Path> csvFiles = Files.list(sourcePath).toList();
-
-            StringBuilder mergedContent = new StringBuilder();
-
-            for (Path csvFile : csvFiles) {
-                List<String> lines = Files.readAllLines(csvFile);
-                for (String line : lines) {
-                    mergedContent.append(line).append(System.lineSeparator());
-                }
-
-                Files.delete(csvFile);
-            }
-
-            writeToFile(outputFolder, "combined.csv", mergedContent.toString());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to combine result files!");
-        }
-    }
-
     public static void writeToFile(String folder, String fileName, String content) {
         try {
             Path folderPath = Path.of(folder);

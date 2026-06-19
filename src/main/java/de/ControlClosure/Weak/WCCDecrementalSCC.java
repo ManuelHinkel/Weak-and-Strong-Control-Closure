@@ -20,11 +20,8 @@ public class WCCDecrementalSCC implements WeakControlClosure{
 
         Set<Vertex> X = new LinkedHashSet<>(Vp);
 
-        Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
-
-        // TODO: init on graph without edges
-        dscc.initialize(H);
-        dscc.delete(Vp);
+        Graph<Vertex> H = GraphUtils.onlyReachableAndNoOutgoingEdges(G, Vp);
+        dscc.initialize(H); // E^+(Vp) already removed
 
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;
@@ -86,12 +83,8 @@ public class WCCDecrementalSCC implements WeakControlClosure{
 
         Set<Vertex> X = new LinkedHashSet<>(Vp);
 
-        Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
-
-        dscc.initialize(H);
-        assert GraphUtils.areSCCsTopologicallyOrdered(H, dscc.SCCs().toList());
-
-        dscc.delete(Vp);
+        Graph<Vertex> H = GraphUtils.onlyReachableAndNoOutgoingEdges(G, Vp);
+        dscc.initialize(H); // E^+(Vp) already removed
 
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;

@@ -22,11 +22,8 @@ public class SCCDecrementalSCC implements StrongControlClosure{
 
         Set<Vertex> X = new HashSet<>(Vp);
 
-        Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
-
-        // TODO: inti on graph withotu edges
-        dscc.initialize(H);
-        dscc.delete(Vp);
+        Graph<Vertex> H = GraphUtils.onlyReachableAndNoOutgoingEdges(G, Vp);
+        dscc.initialize(H); // E^+(Vp) already removed
 
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;
@@ -45,14 +42,13 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                 Set<Vertex> B = Boundary.get(scc); // always exists O(1)
                 Set<Vertex> C = CompletePath.getOrDefault(scc,new HashSet<>()); // O(1)
 
-                assert Collections.disjoint(X,B);
-                assert Collections.disjoint(X,C);
+                Set<Vertex> union = new HashSet<>(B);
+                union.addAll(C);
 
-                X.addAll(B);    // O(X) in total
-                X.addAll(C);    // O(X) in total
+                assert Collections.disjoint(X,union);
 
-                dscc.delete(B); // O(T(n)) in total
-                dscc.delete(C); // O(T(n)) in total
+                X.addAll(union);    // O(X) in total
+                dscc.delete(union); // O(T(n)) in total
 
                 // Ensure that it is empty because DSCC might reuse same SCC object
                 ThetaHat.put(scc, new HashSet<>());
@@ -124,10 +120,8 @@ public class SCCDecrementalSCC implements StrongControlClosure{
 
         Set<Vertex> X = new HashSet<>(Vp);
 
-        Graph<Vertex> H = GraphUtils.onlyReachable(G, Vp);
-
-        dscc.initialize(H);
-        dscc.delete(Vp);
+        Graph<Vertex> H = GraphUtils.onlyReachableAndNoOutgoingEdges(G, Vp);
+        dscc.initialize(H); // E^+(Vp) already removed
 
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;

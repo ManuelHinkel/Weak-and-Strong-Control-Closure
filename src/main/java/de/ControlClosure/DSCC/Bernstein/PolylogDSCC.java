@@ -177,6 +177,7 @@ public class PolylogDSCC implements DecrementalSCC {
 
     @Override
     public void delete(Vertex u, Vertex v) {
+        if (!G.outgoing(u).contains(v)) return;
         for (int i = 0; i < alpha; i++) {
             Map<Vertex, Node> SCCi = vertexNodeMaps.get(i);
             Node Xu = SCCi.get(u);

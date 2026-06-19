@@ -22,22 +22,26 @@ public class GraphUtils {
         return visited;
     }
 
-    public static <T> Graph<T> onlyReachable(Graph<T> G, Set<T> Vp) {
+    public static <T> Graph<T> onlyReachableAndNoOutgoingEdges(Graph<T> G, Set<T> Vp) {
         Set<T> reachable = reachableFrom(G, Vp);
 
-        Map<T, List<T>> h = new HashMap<>();
+        Map<T, List<T>> H = new HashMap<>();
         for(T r: reachable) {
-            List<T> out = G.outgoing(r);
-
             List<T> newOut = new ArrayList<>();
-            for(T t: out) {
-                if (reachable.contains(t)) {
-                    newOut.add(t);
+
+            if (!Vp.contains(r)) { // No E^+(Vp)
+                List<T> out = G.outgoing(r);
+
+                for(T t: out) {
+                    if (reachable.contains(t)) {
+                        newOut.add(t);
+                    }
                 }
             }
-            h.put(r,newOut);
+
+            H.put(r,newOut);
         }
-        return new Graph<>(h);
+        return new Graph<>(H);
     }
 
     public static <T> Set<T> Theta(
