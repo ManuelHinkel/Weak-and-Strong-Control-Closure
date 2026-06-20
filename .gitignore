@@ -1,6 +1,13 @@
 !evaluation/*.sh
 evaluation/*/
 
+!comparison/*.sh
+comparison/*/
+
+c_files
+
+clang-cda
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
