@@ -376,9 +376,13 @@ public class GESTree <T extends Vertex>{
     }
 
     public void augment(Set<T> S) {
-        this.S.addAll(S);
 
         for(T n: S) {
+            if (this.S.contains(n)) continue;
+            this.S.add(n);
+            if (!G.vertices().contains(n)) {
+                System.out.println("Should not happen");
+            }
             for(T v: G.outgoing(n)) {
                 if (isOutTreeEdge(n,v)) {
                     disconnectOut(v);
