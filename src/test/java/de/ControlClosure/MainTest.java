@@ -3,11 +3,6 @@ package de.ControlClosure;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class MainTest {
     @Test
@@ -24,7 +19,7 @@ public class MainTest {
 
     @Test
     public void testStrong() {
-        File directory = new File("./evaluation/data_strong_all");
+        File directory = new File("./evaluation/data_strong_dscc");
 
         for (File file : directory.listFiles()) {
             for(String algo: new String[]{"polylog"}) {

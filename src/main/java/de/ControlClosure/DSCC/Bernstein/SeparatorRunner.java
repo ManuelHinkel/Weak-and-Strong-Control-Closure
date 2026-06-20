@@ -81,7 +81,6 @@ public class SeparatorRunner<T extends Vertex>{
     }
 
     private boolean yieldOutSep() {
-        //System.out.println("Yield Out");
         if (!firstFinish.isDone()) { // shouldn't block when calculating the second result
             inSepTurn.release();
             try {
@@ -94,7 +93,6 @@ public class SeparatorRunner<T extends Vertex>{
     }
 
     private boolean yieldInSep() {
-        //System.out.println("Yield In");
         if (!firstFinish.isDone()) {
             outSepTurn.release();
             try {

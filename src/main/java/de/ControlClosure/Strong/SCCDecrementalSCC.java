@@ -142,18 +142,17 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                 Set<Vertex> B = Boundary.get(scc); // always exists O(1)
                 Set<Vertex> C = CompletePath.getOrDefault(scc,new HashSet<>()); // O(1)
 
-                assert Collections.disjoint(X,B);
-                assert Collections.disjoint(X,C);
+                Set<Vertex> union = new HashSet<>(B);
+                union.addAll(C);
 
-                X.addAll(B);    // O(X) in total
-                X.addAll(C);    // O(X) in total
+                assert Collections.disjoint(X,union);
+
+                X.addAll(union);    // O(X) in total
 
                 int sccCountBefore = dscc.sccCount();                           // Statistics
                 int sccSize = scc.size();                                       // Statistics (needed bc PolylogDSCC reuses SCC objects -> scc.size() may change in deletion)
 
-
-                dscc.delete(B); // O(T(n)) in total
-                dscc.delete(C); // O(T(n)) in total
+                dscc.delete(union); // O(T(n)) in total
 
                 int sccCountAfter = dscc.sccCount();                            // Statistics
                 int sccCountDiff = sccCountAfter - sccCountBefore;              // Statistics
