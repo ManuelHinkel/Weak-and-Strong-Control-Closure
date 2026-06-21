@@ -49,15 +49,7 @@ public class ComparisonRunner {
         for(int i = 0; i < repetitions; i++) {
             statistics = new Statistics(fileName, "Quadratic");
             Set<Vertex> res = new WCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime, statistics, false);
-            if (!res.equals(Xweak)) {
-                System.out.println("File: " + fileName);
-                System.out.println("Expected: " + Xweak);
-                System.out.println("Actual: " + res);
-                throw new RuntimeException("Result is not the weak control closure");
-            }
-
-
-
+            if (!res.equals(Xweak)) throw new RuntimeException("Result is not the weak control closure");
             lWeak.add(statistics);
         }
         Statistics averageWeak = statistics.averageRunTime(lWeak);

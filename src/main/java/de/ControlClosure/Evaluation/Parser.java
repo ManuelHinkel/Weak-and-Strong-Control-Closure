@@ -225,8 +225,6 @@ public class Parser {
             try {
                 String cResult = Files.readString(file.toPath());
                 all.addAll(parseFromCResults(cResult));
-                System.out.println("Created Instances for " + file.getName());
-                System.out.flush();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -234,8 +232,6 @@ public class Parser {
 
         for(Instance i: all) {
             IOUtils.writeToFile(args[1], i.name + ".txt", i.toString());
-            System.out.println("Wrote Instance for " + i.name);
-            System.out.flush();
         }
     }
 }
