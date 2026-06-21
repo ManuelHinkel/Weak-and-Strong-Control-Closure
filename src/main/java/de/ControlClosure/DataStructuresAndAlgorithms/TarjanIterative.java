@@ -1,8 +1,11 @@
-package de.ControlClosure;
+package de.ControlClosure.DataStructuresAndAlgorithms;
+
+import de.ControlClosure.Graph;
+import de.ControlClosure.SCC;
 
 import java.util.*;
 
-public class TarjanIterative<T> extends Tarjan<T>{
+public class TarjanIterative<T> extends Tarjan<T> {
 
     @Override
     public List<SCC<T>> run(Graph<T> G) {

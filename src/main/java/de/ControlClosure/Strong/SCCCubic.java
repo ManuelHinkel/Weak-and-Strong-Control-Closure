@@ -1,8 +1,8 @@
 package de.ControlClosure.Strong;
 
-import de.ControlClosure.DSCCStatistics;
 import de.ControlClosure.Graph;
-import de.ControlClosure.GraphUtils;
+import de.ControlClosure.Statistics.DSCCStatistics;
+import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 
 import java.util.HashSet;

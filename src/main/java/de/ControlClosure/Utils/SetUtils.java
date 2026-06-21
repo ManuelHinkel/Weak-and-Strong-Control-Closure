@@ -1,4 +1,4 @@
-package de.ControlClosure;
+package de.ControlClosure.Utils;
 
 import de.ControlClosure.DSCC.Bernstein.Separator;
 
@@ -20,8 +20,10 @@ public class SetUtils {
         return true;
     }
 
+    public static int seed;
+
     public static <V> V pickRandom(Set<V> vertices) {
-        Random r = new Random();
+        Random r = new Random(seed);
         int index = r.nextInt(vertices.size());
 
         int i = 0;

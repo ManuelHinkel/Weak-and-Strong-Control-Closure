@@ -1,6 +1,8 @@
 package de.ControlClosure.Weak;
 
 import de.ControlClosure.*;
+import de.ControlClosure.Statistics.DSCCStatistics;
+import de.ControlClosure.Utils.GraphUtils;
 
 import java.util.HashSet;
 import java.util.Set;

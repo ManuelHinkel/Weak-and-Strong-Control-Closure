@@ -1,4 +1,9 @@
-package de.ControlClosure;
+package de.ControlClosure.Evaluation;
+
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
+import de.ControlClosure.Graph;
+import de.ControlClosure.Utils.IOUtils;
+import de.ControlClosure.Vertex;
 
 import java.util.*;
 
@@ -10,9 +15,6 @@ public class GraphGenerator {
 
         String dataFolder = args[0];
 
-        Graph<Vertex> G;
-        Set<Vertex> Vprime;
-        Set<Vertex> P = null;
         String fileName;
         String content;
         if (args.length == 5) {
@@ -35,10 +37,11 @@ public class GraphGenerator {
             int k = Integer.parseInt(args[1]);
 
             Tuple<Graph<Vertex>, Set<Vertex>> res = makeQuadraticDSCCGraph(k);
-            G = res.first;
-            Vprime = res.second;
+            Instance instance = new Instance();
+            instance.G = res.first;
+            instance.Vprime = res.second;
             fileName = "WorstCase n=" + (2*k) + ".txt";
-            content = makeString(G,Vprime,P);
+            content = instance.toString();
         }
         IOUtils.writeToFile(dataFolder, fileName, content);
     }
@@ -109,56 +112,4 @@ public class GraphGenerator {
         return P;
     }
 
-    private static String makeString(Graph<Vertex> G, Set<Vertex> Vprime, Set<Vertex> P) {
-        List<Vertex> V = new ArrayList<>(G.vertices());
-        V.sort(Comparator.comparingInt(Object::hashCode));
-
-        StringBuilder content = new StringBuilder();
-
-        for(Vertex v: V) {
-            StringBuilder line = new StringBuilder();
-            line.append(v.hashCode()).append(": ");
-
-            List<Vertex> adj = new ArrayList<>(G.outgoing(v));
-            adj.sort(Comparator.comparingInt(Object::hashCode));
-
-            for(Vertex t: adj) {
-                line.append(t.hashCode()).append(", ");
-            }
-
-            int i = line.lastIndexOf(", ");
-            if (i != -1) {
-                line.replace(i,i+2, "");
-            }
-            line.append(System.lineSeparator());
-            content.append(line);
-        }
-
-        StringBuilder VprimeLine = new StringBuilder();
-        VprimeLine.append("V': ");
-        for(Vertex v: Vprime) {
-            VprimeLine.append(v.hashCode()).append(", ");
-        }
-        int i = VprimeLine.lastIndexOf(", ");
-        if (i != -1) {
-            VprimeLine.replace(i,i+2, "");
-        }
-        VprimeLine.append(System.lineSeparator());
-        content.append(VprimeLine);
-
-        if (P != null) {
-            StringBuilder PLine = new StringBuilder();
-            PLine.append("P: ");
-            for(Vertex v: P) {
-                PLine.append(v.hashCode()).append(", ");
-            }
-            i = PLine.lastIndexOf(", ");
-            if (i != -1) {
-                PLine.replace(i,i+2, "");
-            }
-            content.append(PLine);
-        }
-
-        return content.toString();
-    }
 }

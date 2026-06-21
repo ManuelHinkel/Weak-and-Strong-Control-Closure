@@ -1,5 +1,6 @@
-package de.ControlClosure;
+package de.ControlClosure.Evaluation;
 
+import de.ControlClosure.Vertex;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,8 +23,8 @@ public class MainTest {
         File directory = new File("./evaluation/data_strong_dscc");
 
         for (File file : directory.listFiles()) {
-            for(String algo: new String[]{"polylog"}) {
-                Main.main(new String[]{algo, file.getAbsolutePath(), "2", "s", ""});
+            for(String algo: new String[]{"quadratic"}) {
+                Main.main(new String[]{algo, file.getAbsolutePath(), "10", "s", ""});
                 Vertex.resetID();
             }
         }

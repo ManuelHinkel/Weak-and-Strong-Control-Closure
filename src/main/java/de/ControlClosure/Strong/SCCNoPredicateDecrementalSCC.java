@@ -2,6 +2,9 @@ package de.ControlClosure.Strong;
 
 import de.ControlClosure.DSCC.DecrementalSCC;
 import de.ControlClosure.*;
+import de.ControlClosure.Statistics.DSCCStatistics;
+import de.ControlClosure.Utils.GraphUtils;
+import de.ControlClosure.Utils.SetUtils;
 
 import java.util.*;
 

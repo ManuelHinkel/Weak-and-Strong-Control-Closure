@@ -2,6 +2,12 @@ package de.ControlClosure.DSCC.Bernstein;
 
 import de.ControlClosure.*;
 import de.ControlClosure.DSCC.DecrementalSCC;
+import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
+import de.ControlClosure.Evaluation.Main;
+import de.ControlClosure.Utils.GraphUtils;
+import de.ControlClosure.Utils.MathUtils;
+import de.ControlClosure.Utils.SetUtils;
 
 import java.util.*;
 
@@ -24,8 +30,8 @@ public class PolylogDSCC implements DecrementalSCC {
     public void initialize(Graph<Vertex> G) {
         this.G = G;
         sccs = new HashList<>();
-        alpha = MathUtil.lg2f(G.size()) + 1;
-        delta = 128.0 * Math.pow(MathUtil.lg2c(G.size()), 2.0);
+        alpha = MathUtils.lg2f(G.size()) + 1;
+        delta = 128.0 * Math.pow(MathUtils.lg2c(G.size()), 2.0);
 
         vertexNodeMaps = new ArrayList<>();
         graphs = new ArrayList<>();
@@ -344,6 +350,8 @@ public class PolylogDSCC implements DecrementalSCC {
         if (YwOutZVertices.isEmpty()) {
             System.out.println("Y: " + Y.vertices());
             System.out.println("Z: " + Z.vertices());
+            System.out.println("Seed: " + SetUtils.seed);
+            System.out.println("File: " + Main.curfile);
             throw new RuntimeException("Should not happen");
         }
         if (Z.size() > YwOutZVertices.size()) {

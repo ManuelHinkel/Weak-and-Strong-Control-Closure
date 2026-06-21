@@ -1,6 +1,6 @@
-package de.ControlClosure;
+package de.ControlClosure.Utils;
 
-public class MathUtil {
+public class MathUtils {
 
     public static int lg2f(int n) {
         return (int) lg2(n);

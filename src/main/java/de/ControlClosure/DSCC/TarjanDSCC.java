@@ -1,6 +1,9 @@
 package de.ControlClosure.DSCC;
 
 import de.ControlClosure.*;
+import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tarjan;
+import de.ControlClosure.DataStructuresAndAlgorithms.TarjanIterative;
 
 import java.util.*;
 

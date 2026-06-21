@@ -1,11 +1,13 @@
-package de.ControlClosure;
+package de.ControlClosure.Statistics;
 
 import java.util.List;
 
 public class Statistics {
+    protected static double ONE_MILLION = 1_000_000;
+
     protected String file;
     protected String algorithm;
-    protected long runningTimeMS;
+    protected long runningTimeNano;
     protected int numVertices;
     protected int numEdges;
 
@@ -28,8 +30,12 @@ public class Statistics {
         this.numEdges = numEdges;
     }
 
-    public void setRunningTimeMS(long runningTimeMS) {
-        this.runningTimeMS = runningTimeMS;
+    public void setRunningTimeNano(long runningTimeNano) {
+        this.runningTimeNano = runningTimeNano;
+    }
+
+    public double getRunningTimeMs() {
+        return runningTimeNano / ONE_MILLION;
     }
 
     public void setP(double p) {
@@ -51,7 +57,7 @@ public class Statistics {
                 + numRuns + ", "
                 + numVertices + ", "
                 + numEdges + ", "
-                + runningTimeMS + ", "
+                + getRunningTimeMs() + ", "
                 + p + ", "
                 + pPrime + ", "
                 + pF;
@@ -64,11 +70,11 @@ public class Statistics {
         long sumTime=0;
 
         for(Statistics s: statisticsList) {
-            sumTime += s.runningTimeMS;
+            sumTime += s.runningTimeNano;
         }
 
         Statistics average = new Statistics(file,algo);
-        average.runningTimeMS = sumTime / statisticsList.size();
+        average.runningTimeNano = sumTime / statisticsList.size();
         average.numVertices = statisticsList.get(0).numVertices;
         average.numEdges = statisticsList.get(0).numEdges;
         average.p = statisticsList.get(0).p;

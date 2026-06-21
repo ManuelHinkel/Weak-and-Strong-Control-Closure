@@ -1,11 +1,10 @@
 package de.ControlClosure.DSCC;
 
 import de.ControlClosure.Graph;
-import de.ControlClosure.HashList;
+import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
 import de.ControlClosure.SCC;
 import de.ControlClosure.Vertex;
 
-import java.util.List;
 import java.util.Set;
 
 public interface DecrementalSCC {

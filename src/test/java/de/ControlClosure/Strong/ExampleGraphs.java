@@ -1,7 +1,7 @@
 package de.ControlClosure.Strong;
 
 import de.ControlClosure.Graph;
-import de.ControlClosure.GraphUtils;
+import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 
 import java.util.*;

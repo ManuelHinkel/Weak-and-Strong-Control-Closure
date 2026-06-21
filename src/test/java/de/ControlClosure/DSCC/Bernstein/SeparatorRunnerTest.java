@@ -2,7 +2,7 @@ package de.ControlClosure.DSCC.Bernstein;
 
 
 import de.ControlClosure.Graph;
-import de.ControlClosure.Tuple;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 import de.ControlClosure.Vertex;
 import org.junit.jupiter.api.Test;
 

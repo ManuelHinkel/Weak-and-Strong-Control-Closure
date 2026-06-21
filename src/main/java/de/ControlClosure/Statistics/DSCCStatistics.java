@@ -1,8 +1,8 @@
-package de.ControlClosure;
+package de.ControlClosure.Statistics;
 
 import java.util.List;
 
-public class DSCCStatistics extends Statistics{
+public class DSCCStatistics extends Statistics {
     protected double avgSCCSize;
     protected double avgNewSCCCount;
     protected double avgRatio;
@@ -40,7 +40,7 @@ public class DSCCStatistics extends Statistics{
 
         for(Statistics s: statisticsList) {
             DSCCStatistics ds = (DSCCStatistics)s;
-            sumTime += s.runningTimeMS;
+            sumTime += s.runningTimeNano;
             sumSize += ds.avgSCCSize;
             sumNew += ds.avgNewSCCCount;
             sumRatio += ds.avgRatio;
@@ -52,7 +52,7 @@ public class DSCCStatistics extends Statistics{
         average.p = statisticsList.get(0).p;
         average.pPrime = statisticsList.get(0).pPrime;
         average.pF = statisticsList.get(0).pF;
-        average.runningTimeMS = sumTime / statisticsList.size();
+        average.runningTimeNano = sumTime / statisticsList.size();
         average.avgSCCSize = sumSize / statisticsList.size();
         average.avgNewSCCCount = sumNew / statisticsList.size();
         average.avgRatio = sumRatio / statisticsList.size();

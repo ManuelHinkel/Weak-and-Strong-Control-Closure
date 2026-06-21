@@ -12,5 +12,5 @@ kStep=1000
 
 for ((k=kMin; k<kMax; k+=kStep)); do
   echo "$k"
-  java -cp ./../target/classes de.ControlClosure.GraphGenerator "$OUT_DIR" "$k"
+  java -cp ./../target/classes de.ControlClosure.Evaluation.GraphGenerator "$OUT_DIR" "$k"
 done

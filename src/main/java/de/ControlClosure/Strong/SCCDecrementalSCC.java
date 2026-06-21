@@ -2,7 +2,9 @@ package de.ControlClosure.Strong;
 
 import de.ControlClosure.*;
 import de.ControlClosure.DSCC.DecrementalSCC;
-import de.ControlClosure.Weak.WeakControlClosure;
+import de.ControlClosure.Statistics.DSCCStatistics;
+import de.ControlClosure.Utils.GraphUtils;
+import de.ControlClosure.Utils.SetUtils;
 
 import java.util.*;
 

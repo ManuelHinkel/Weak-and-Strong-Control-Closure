@@ -3,6 +3,7 @@ package de.ControlClosure.DSCC.Bernstein;
 import de.ControlClosure.*;
 import de.ControlClosure.DSCC.DecrementalSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
+import de.ControlClosure.Utils.GraphUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

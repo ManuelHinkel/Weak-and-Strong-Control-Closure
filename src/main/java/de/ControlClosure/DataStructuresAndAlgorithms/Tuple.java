@@ -1,4 +1,4 @@
-package de.ControlClosure;
+package de.ControlClosure.DataStructuresAndAlgorithms;
 
 public class Tuple<V,U> {
     public V first;

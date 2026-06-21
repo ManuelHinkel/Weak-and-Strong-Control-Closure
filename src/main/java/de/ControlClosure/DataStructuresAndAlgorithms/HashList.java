@@ -1,4 +1,4 @@
-package de.ControlClosure;
+package de.ControlClosure.DataStructuresAndAlgorithms;
 
 import java.util.*;
 

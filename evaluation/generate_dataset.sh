@@ -33,7 +33,7 @@ for ((i=nMin; i<nMax; i+=nStep)); do
         for pPrime in $(seq "$pPMin" "$pPStep" "$pPMax"); do
             for pF in $(seq "$pFMin" "$pFStep" "$pFMax"); do
               echo "$i" "$p" "$pPrime" "$pF"
-              java -cp ./../target/classes de.ControlClosure.GraphGenerator "$OUT_DIR" "$i" "$p" "$pPrime" "$pF"
+              java -cp ./../target/classes de.ControlClosure.Evaluation.GraphGenerator "$OUT_DIR" "$i" "$p" "$pPrime" "$pF"
             done
         done
     done

@@ -2,8 +2,7 @@ package de.ControlClosure.DSCC.Bernstein;
 
 
 import de.ControlClosure.Graph;
-import de.ControlClosure.GraphUtils;
-import de.ControlClosure.SetUtils;
+import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 
 import java.util.*;

@@ -1,9 +1,16 @@
-package de.ControlClosure;
+package de.ControlClosure.Evaluation;
 
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
+import de.ControlClosure.Graph;
+import de.ControlClosure.Statistics.DSCCStatistics;
+import de.ControlClosure.Statistics.Statistics;
 import de.ControlClosure.Strong.SCCCubic;
 import de.ControlClosure.Strong.SCCDecrementalSCC;
+import de.ControlClosure.Utils.GraphUtils;
+import de.ControlClosure.Utils.SetUtils;
+import de.ControlClosure.Vertex;
 import de.ControlClosure.Weak.WCCCubic;
 import de.ControlClosure.Weak.WCCDecrementalSCC;
 
@@ -42,10 +49,10 @@ public class Main {
 
             runRandomGraph(fileName,seed,n,p,pPrime,pF,repetitions,algorithm,weak,sccStats);
         } else { // Parse Graph
-            Tuple<Graph<Vertex>, Tuple<Set<Vertex>,Set<Vertex>>> parsed = GraphUtils.parseInstance(content);
-            Graph<Vertex> G = parsed.first;
-            Set<Vertex> Vprime = parsed.second.first;
-            Set<Vertex> P = parsed.second.second;
+            Instance instance = Parser.parseInstance(content);
+            Graph<Vertex> G = instance.G;
+            Set<Vertex> Vprime = instance.Vprime;
+            Set<Vertex> P = instance.P;
 
             List<Statistics> l = new ArrayList<>();
             Statistics statistics = null;
@@ -86,11 +93,16 @@ public class Main {
             statistics.setPPrime(pPrime);
             statistics.setPF(pF);
 
+            SetUtils.seed = r.nextInt(Integer.MAX_VALUE); // TODO: only for debug
+            curfile = fileName;
+
             run(G,Vprime,P,algorithm,weak,statistics, sccStats);
             l.add(statistics);
         }
         System.out.println(statistics.averageRunTime(l));
     }
+
+    public static String curfile;
 
     private static void run(Graph<Vertex> G, Set<Vertex> Vprime, Set<Vertex> P, String algorithm, boolean weak, Statistics statistics, boolean sccStats) {
         switch (algorithm) {

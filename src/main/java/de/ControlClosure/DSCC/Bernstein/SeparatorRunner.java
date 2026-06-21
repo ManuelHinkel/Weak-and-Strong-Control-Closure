@@ -2,6 +2,7 @@ package de.ControlClosure.DSCC.Bernstein;
 
 
 import de.ControlClosure.*;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

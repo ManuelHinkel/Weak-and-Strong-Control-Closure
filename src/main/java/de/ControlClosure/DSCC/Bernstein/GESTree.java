@@ -1,11 +1,10 @@
 package de.ControlClosure.DSCC.Bernstein;
 
 import de.ControlClosure.Graph;
-import de.ControlClosure.Tuple;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 import de.ControlClosure.Vertex;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GESTree <T extends Vertex>{
     public static final int INFINITY = Integer.MAX_VALUE;
