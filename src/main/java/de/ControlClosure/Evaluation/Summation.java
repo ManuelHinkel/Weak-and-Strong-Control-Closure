@@ -40,7 +40,7 @@ public class Summation {
                         + sumTimeOtherWeakMs + ", "
                         + sumTimeOtherStrongMs;
 
-                IOUtils.writeToFile("./summed_results/", args[0] + ".csv", out);
+                IOUtils.writeToFile("summed_results", args[0] + ".csv", out);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

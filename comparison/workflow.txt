@@ -1,0 +1,13 @@
+#C_SUB_DIR = [name of subdirectory of ./c_files containing c files]; example: "gcc"
+
+./main_clang.sh C_SUB_DIR
+# runs clang-cda on every c-file in the directory ./c_files/C_SUB_DIR
+
+./c_results_to_instances C_SUB_DIR
+# converts results of clang-cda to usable instances in ./instances for our algorithm
+
+./main.sh C_SUB_DIR
+# runs our algorithm on all the instances in ./instances/C_SUB_DIR and writes the results in ./instance_results
+
+./sum.sh C_SUB_DIR
+# iterates over all the results in /instance_results/C_SUB_DIR and sums up the running times
