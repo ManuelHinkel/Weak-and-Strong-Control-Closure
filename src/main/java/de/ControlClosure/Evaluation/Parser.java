@@ -232,6 +232,7 @@ public class Parser {
 
         for(Instance i: all) {
             IOUtils.writeToFile(args[1], i.name + ".txt", i.toString());
+            System.out.println("Created Instance for " + i.name);
         }
     }
 }
