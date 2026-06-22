@@ -1,5 +1,7 @@
 package de.ControlClosure.Statistics;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Statistics {
@@ -75,6 +77,31 @@ public class Statistics {
 
         Statistics average = new Statistics(file,algo);
         average.runningTimeNano = sumTime / statisticsList.size();
+        average.numVertices = statisticsList.get(0).numVertices;
+        average.numEdges = statisticsList.get(0).numEdges;
+        average.p = statisticsList.get(0).p;
+        average.pPrime = statisticsList.get(0).pPrime;
+        average.pF = statisticsList.get(0).pF;
+        average.numRuns = statisticsList.size();
+
+        return average;
+    }
+
+    public Statistics medianRunningTime(List<Statistics> statisticsList) {
+        String file = statisticsList.get(0).file;
+        String algo = statisticsList.get(0).algorithm;
+
+        List<Long> times = new ArrayList<>();
+        for (Statistics s : statisticsList) {
+            times.add(s.runningTimeNano);
+        }
+
+        Collections.sort(times);
+
+        long medianTime = times.get(times.size() / 2);
+
+        Statistics average = new Statistics(file,algo);
+        average.runningTimeNano = medianTime;
         average.numVertices = statisticsList.get(0).numVertices;
         average.numEdges = statisticsList.get(0).numEdges;
         average.p = statisticsList.get(0).p;

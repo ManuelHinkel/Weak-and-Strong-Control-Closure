@@ -53,22 +53,23 @@ public class ComparisonRunner {
             lWeak.add(statistics);
         }
         Statistics averageWeak = statistics.averageRunTime(lWeak);
+        Statistics medianWeak = statistics.medianRunningTime(lWeak);
 
-        double highest = 0.0;
         for(int i = 0; i < repetitions; i++) {
             statistics = new Statistics(fileName, "Quadratic");
             Set<Vertex> res = new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P, statistics, false);
             if (!res.equals(Xstrong)) throw new RuntimeException("Result is not the strong control closure");
             lStrong.add(statistics);
-            if (statistics.getRunningTimeMs() > highest) highest = statistics.getRunningTimeMs();
         }
         Statistics averageStrong = statistics.averageRunTime(lStrong);
+        Statistics medianStrong = statistics.medianRunningTime(lStrong);
 
-        System.out.println("Longest " + highest);
         System.out.println(fileName + ", "
                 + averageWeak.getRunningTimeMs()  + ", "
                 + averageStrong.getRunningTimeMs() + ", "
                 + instance.wccTime + ", "
-                + instance.sccTime);
+                + instance.sccTime + ", "
+                + medianWeak.getRunningTimeMs() + ", "
+                + medianStrong.getRunningTimeMs());
     }
 }
