@@ -84,6 +84,7 @@ public class Main {
 
         Random r = new Random(seed);
         for(int i = 0; i < reps; i++) {
+            Vertex.resetID();
             Graph<Vertex> G = GraphGenerator.randomCFG(n,p,r);
             Set<Vertex> Vprime = GraphGenerator.chooseVprime(G.vertices(), pPrime, r);
             Set<Vertex> P = GraphGenerator.computeP(G, pF, r);
@@ -92,9 +93,6 @@ public class Main {
             statistics.setP(p);
             statistics.setPPrime(pPrime);
             statistics.setPF(pF);
-
-            SetUtils.seed = r.nextInt(Integer.MAX_VALUE); // TODO: only for debug
-            curfile = fileName;
 
             run(G,Vprime,P,algorithm,weak,statistics, sccStats);
             l.add(statistics);

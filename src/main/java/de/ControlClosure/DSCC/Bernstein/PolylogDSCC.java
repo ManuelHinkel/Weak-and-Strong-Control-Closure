@@ -347,13 +347,6 @@ public class PolylogDSCC implements DecrementalSCC {
 
         Set<Vertex> YwOutZVertices = new LinkedHashSet<>(Y.vertices());
         YwOutZVertices.removeAll(Z.vertices());
-        if (YwOutZVertices.isEmpty()) {
-            System.out.println("Y: " + Y.vertices());
-            System.out.println("Z: " + Z.vertices());
-            System.out.println("Seed: " + SetUtils.seed);
-            System.out.println("File: " + Main.curfile);
-            throw new RuntimeException("Should not happen");
-        }
         if (Z.size() > YwOutZVertices.size()) {
             Node YwOutZ = new Node(YwOutZVertices);
             return splitNode(ip1,YwOutZ,x,y);

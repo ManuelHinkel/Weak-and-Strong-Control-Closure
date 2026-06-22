@@ -24,7 +24,7 @@ public class MainTest {
 
         for (File file : directory.listFiles()) {
             for(String algo: new String[]{"quadratic"}) {
-                Main.main(new String[]{algo, file.getAbsolutePath(), "10", "s", ""});
+                Main.main(new String[]{algo, file.getAbsolutePath(), "2", "s", "scc"});
                 Vertex.resetID();
             }
         }

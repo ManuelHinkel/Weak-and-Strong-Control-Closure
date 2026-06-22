@@ -9,5 +9,5 @@ flags=("cubic" "quadratic" "polylog")
 group=$(( (SLURM_ARRAY_TASK_ID -1) / 3 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 3 ))
 
-java -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "10" "$ALGORITHM" ""
+java -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "20" "$ALGORITHM" ""
 
