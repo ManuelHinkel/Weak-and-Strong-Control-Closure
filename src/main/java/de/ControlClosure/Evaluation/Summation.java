@@ -14,7 +14,7 @@ public class Summation {
             throw new IllegalArgumentException("Expected [c Subdirectory]!");
         }
 
-        File cSubDir = new File("./instance_results/" + args[0]);
+        File cSubDir = new File(args[0]);
 
         double sumTimeWeakMs = 0.0;
         double sumTimeStrongMs = 0.0;
