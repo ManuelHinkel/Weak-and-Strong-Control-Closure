@@ -165,7 +165,7 @@ public class Parser {
         String[] data = func.split(",");
 
         String fileName = data[0].split(":",2)[1].trim();
-        instance.name = cFileName + " " + fileName;
+        instance.name = cFileName + "-" + fileName;
 
         // Computation time
         String execWCC = data[3].split(":",2)[1].trim();

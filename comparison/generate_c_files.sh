@@ -17,7 +17,9 @@ pStep=0.15
 
 for ((i=nMin; i<nMax; i+=nStep)); do
     for p in $(seq "$pMin" "$pStep" "$pMax"); do
-          echo "$i" "$p"
-          java -cp ./../target/classes de.ControlClosure.Evaluation.CFileGenerator "$OUT_DIR" "$i" "$p"
+      for ((k=0; k<20; k+=1)); do
+        echo "$i" "$p" "$k"
+        java -cp ./../target/classes de.ControlClosure.Evaluation.CFileGenerator "$OUT_DIR" "$i" "$p" "$k"
+      done
     done
 done

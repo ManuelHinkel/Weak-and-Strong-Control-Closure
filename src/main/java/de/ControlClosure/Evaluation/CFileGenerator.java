@@ -14,8 +14,8 @@ import java.util.Random;
 
 public class CFileGenerator {
     public static void main(String[] args) {
-        if (args.length != 3) {
-            throw new IllegalArgumentException("Expected arguments: [out] [n] [p]!");
+        if (args.length != 4) {
+            throw new IllegalArgumentException("Expected arguments: [out] [n] [p] [postfix]!");
         }
 
         int n = Integer.parseInt(args[1]);
@@ -24,7 +24,7 @@ public class CFileGenerator {
         Vertex.resetID();
         Graph<Vertex> G = GraphGenerator.randomCFG(n,p, new Random());
 
-        String fileName = "n=" + n + " p=" + p + ".c";
+        String fileName = "n=" + n + "_p=" + p + "-" + args[3] + ".c";
         String content = emitC(G);
         IOUtils.writeToFile(args[0], fileName,content);
     }
