@@ -2,14 +2,11 @@ package de.ControlClosure.Evaluation;
 
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
-import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 import de.ControlClosure.Graph;
 import de.ControlClosure.Statistics.DSCCStatistics;
 import de.ControlClosure.Statistics.Statistics;
 import de.ControlClosure.Strong.SCCCubic;
 import de.ControlClosure.Strong.SCCDecrementalSCC;
-import de.ControlClosure.Utils.GraphUtils;
-import de.ControlClosure.Utils.SetUtils;
 import de.ControlClosure.Vertex;
 import de.ControlClosure.Weak.WCCCubic;
 import de.ControlClosure.Weak.WCCDecrementalSCC;

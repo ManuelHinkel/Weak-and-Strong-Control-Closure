@@ -13,4 +13,4 @@ echo "$OUT_DIR"
 ./compile.sh
 
 n=$(ls $INSTANCE_DIR -1 | wc -l)
-sbatch --array=1-$n -n 1 -N 1 --exclusive=user -p infosun --constraint=chimaira --output="./${OUT_DIR}/slurm-%A_%a.out" --mem=10G  ./job_script.sh "$INSTANCE_DIR"
+sbatch --array=1-$n -n 1 -N 1 --exclusive -p infosun --constraint=chimaira --output="./${OUT_DIR}/slurm-%A_%a.out" --mem=10G  ./job_script.sh "$INSTANCE_DIR"
