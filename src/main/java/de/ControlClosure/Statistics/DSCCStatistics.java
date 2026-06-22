@@ -29,7 +29,7 @@ public class DSCCStatistics extends Statistics {
     }
 
     @Override
-    public Statistics averageRunTime(List<Statistics> statisticsList) {
+    public Statistics average(List<Statistics> statisticsList) {
         String file = statisticsList.get(0).file;
         String algo = statisticsList.get(0).algorithm;
 

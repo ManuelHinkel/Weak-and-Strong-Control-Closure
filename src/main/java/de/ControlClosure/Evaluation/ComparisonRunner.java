@@ -52,8 +52,9 @@ public class ComparisonRunner {
             if (!res.equals(Xweak)) throw new RuntimeException("Result is not the weak control closure");
             lWeak.add(statistics);
         }
-        Statistics averageWeak = statistics.averageRunTime(lWeak);
+        Statistics averageWeak = statistics.average(lWeak);
         Statistics medianWeak = statistics.medianRunningTime(lWeak);
+        Statistics longestWeak = statistics.longestRunningTime(lWeak);
 
         for(int i = 0; i < repetitions; i++) {
             statistics = new Statistics(fileName, "Quadratic");
@@ -61,15 +62,19 @@ public class ComparisonRunner {
             if (!res.equals(Xstrong)) throw new RuntimeException("Result is not the strong control closure");
             lStrong.add(statistics);
         }
-        Statistics averageStrong = statistics.averageRunTime(lStrong);
+        Statistics averageStrong = statistics.average(lStrong);
         Statistics medianStrong = statistics.medianRunningTime(lStrong);
+        Statistics longestStrong = statistics.longestRunningTime(lStrong);
 
         System.out.println(fileName + ", "
+                + G.size() + ", "
                 + averageWeak.getRunningTimeMs()  + ", "
                 + averageStrong.getRunningTimeMs() + ", "
                 + instance.wccTime + ", "
                 + instance.sccTime + ", "
                 + medianWeak.getRunningTimeMs() + ", "
-                + medianStrong.getRunningTimeMs());
+                + medianStrong.getRunningTimeMs() + ", "
+                + longestWeak.getRunningTimeMs() + ", "
+                + longestStrong.getRunningTimeMs());
     }
 }

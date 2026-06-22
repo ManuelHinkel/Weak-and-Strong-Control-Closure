@@ -65,7 +65,7 @@ public class Statistics {
                 + pF;
     }
 
-    public Statistics averageRunTime(List<Statistics> statisticsList) {
+    public Statistics average(List<Statistics> statisticsList) {
         String file = statisticsList.get(0).file;
         String algo = statisticsList.get(0).algorithm;
 
@@ -102,6 +102,27 @@ public class Statistics {
 
         Statistics average = new Statistics(file,algo);
         average.runningTimeNano = medianTime;
+        average.numVertices = statisticsList.get(0).numVertices;
+        average.numEdges = statisticsList.get(0).numEdges;
+        average.p = statisticsList.get(0).p;
+        average.pPrime = statisticsList.get(0).pPrime;
+        average.pF = statisticsList.get(0).pF;
+        average.numRuns = statisticsList.size();
+
+        return average;
+    }
+
+    public Statistics longestRunningTime(List<Statistics> statisticsList) {
+        String file = statisticsList.get(0).file;
+        String algo = statisticsList.get(0).algorithm;
+
+        long longest=0;
+        for (Statistics s : statisticsList) {
+            if (s.runningTimeNano > longest) longest = s.runningTimeNano;
+        }
+
+        Statistics average = new Statistics(file,algo);
+        average.runningTimeNano = longest;
         average.numVertices = statisticsList.get(0).numVertices;
         average.numEdges = statisticsList.get(0).numEdges;
         average.p = statisticsList.get(0).p;

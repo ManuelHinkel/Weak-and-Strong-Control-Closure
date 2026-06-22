@@ -59,7 +59,7 @@ public class Main {
                 run(G, Vprime, P, algorithm, weak, statistics, sccStats);
                 l.add(statistics);
             }
-            System.out.println(statistics.averageRunTime(l));
+            System.out.println(statistics.average(l));
         }
     }
 
@@ -94,7 +94,7 @@ public class Main {
             run(G,Vprime,P,algorithm,weak,statistics, sccStats);
             l.add(statistics);
         }
-        System.out.println(statistics.averageRunTime(l));
+        System.out.println(statistics.average(l));
     }
 
     public static String curfile;
