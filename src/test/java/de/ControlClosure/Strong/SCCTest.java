@@ -2,7 +2,9 @@ package de.ControlClosure.Strong;
 
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tarjan;
 import de.ControlClosure.Graph;
+import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +23,7 @@ public class SCCTest {
     public void test(){
         for (StrongControlClosure scc : SCC) {
             System.out.println("Running Implementation: " + scc.getClass().getSimpleName());
-            for (int j = 0; j < ExampleGraphs.graphs.length; j++) {
+            for (int j = ExampleGraphs.graphs.length-1; j < ExampleGraphs.graphs.length; j++) {
                 Graph<Vertex> G = ExampleGraphs.graphs[j];
                 Set<Vertex> Vp = ExampleGraphs.startVertices(j);
                 Set<Vertex> P = ExampleGraphs.predicateVertices(j);

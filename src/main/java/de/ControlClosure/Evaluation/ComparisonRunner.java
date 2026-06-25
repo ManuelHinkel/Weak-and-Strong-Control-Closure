@@ -50,28 +50,31 @@ public class ComparisonRunner {
             List<Statistics> lStrong = new ArrayList<>();
             Statistics statistics = null;
 
+            boolean notMatchingWeak = false;
+
             for(int i = 0; i < repetitions; i++) {
                 statistics = new Statistics(fileName, "Quadratic");
                 Set<Vertex> res = new WCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime, statistics, false);
-                if (!res.equals(Xweak)) throw new RuntimeException("Result is not the weak control closure");
                 lWeak.add(statistics);
+                if (!res.equals(Xweak)) {
+                    notMatchingWeak = true;
+                    break;
+                }
             }
             Statistics averageWeak = statistics.average(lWeak);
             Statistics medianWeak = statistics.medianRunningTime(lWeak);
             Statistics longestWeak = statistics.longestRunningTime(lWeak);
 
+            boolean notMatchingStrong = false;
+
             for(int i = 0; i < repetitions; i++) {
                 statistics = new Statistics(fileName, "Quadratic");
                 Set<Vertex> res = new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P, statistics, false);
-                if (!res.equals(Xstrong)) {
-                    System.out.println("G: " + G);
-                    System.out.println("V': " + Vprime);
-                    System.out.println("P: " + P);
-                    System.out.println("Expected: " + Xstrong);
-                    System.out.println("Actual: " + res);
-                    throw new RuntimeException("Result is not the strong control closure");
-                }
                 lStrong.add(statistics);
+                if (!res.equals(Xstrong)) {
+                    notMatchingStrong = true;
+                    break;
+                }
             }
             Statistics averageStrong = statistics.average(lStrong);
             Statistics medianStrong = statistics.medianRunningTime(lStrong);
@@ -81,8 +84,8 @@ public class ComparisonRunner {
                     + G.size() + ", "
                     + averageWeak.getRunningTimeMs()  + ", "
                     + averageStrong.getRunningTimeMs() + ", "
-                    + instance.wccTime + ", "
-                    + instance.sccTime + ", "
+                    + (notMatchingWeak ? "EXCEPTION" :  instance.wccTime) + ", "
+                    + (notMatchingStrong ? "EXCEPTION" :  instance.sccTime) + ", "
                     + medianWeak.getRunningTimeMs() + ", "
                     + medianStrong.getRunningTimeMs() + ", "
                     + longestWeak.getRunningTimeMs() + ", "

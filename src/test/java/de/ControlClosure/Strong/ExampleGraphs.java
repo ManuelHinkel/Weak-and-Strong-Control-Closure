@@ -26,6 +26,10 @@ public class ExampleGraphs {
             new Vertex(), //15
             new Vertex(), //16
             new Vertex(), //17
+            new Vertex(), //18
+            new Vertex(), //19
+            new Vertex(), //20
+            new Vertex(), //21
     };
 
     public static Graph<Vertex>[] graphs = new Graph[]{
@@ -37,6 +41,7 @@ public class ExampleGraphs {
             buildForIncompPredicate(),
             buildForSelfLoop(),
             buildLoopPropagation(),
+            buildPerlbench(),
     };
     private static final List<Vertex>[] startVertices = new List[] {
             List.of(v[0], v[2], v[7]),
@@ -44,9 +49,10 @@ public class ExampleGraphs {
             List.of(v[8], v[14], v[17]),
             List.of(v[0], v[7]),
             List.of(v[0], v[7], v[9]),
-            List.of(v[0],v[7]),
-            List.of(v[0],v[2]),
-            List.of(v[0],v[4]),
+            List.of(v[0], v[7]),
+            List.of(v[0], v[2]),
+            List.of(v[0], v[4]),
+            List.of(v[0], v[4], v[8], v[17], v[20], v[21])
     };
 
     private static final List<Vertex>[] predicateVertices = new List[] {
@@ -58,6 +64,7 @@ public class ExampleGraphs {
             List.of(v[0],v[1],v[3]), // v[3] is incomplete predicate
             List.of(v[1]),
             List.of(v[1]),
+            List.of(v[2], v[4], v[5], v[7], v[9], v[10], v[12], v[14], v[15], v[17], v[18], v[20]),
     };
 
     private static final List<Vertex>[]expectedResults = new List[] {
@@ -74,6 +81,7 @@ public class ExampleGraphs {
             List.of(v[0], v[7], v[1], v[3]),
             List.of(v[0], v[2], v[1]),
             List.of(v[0], v[4], v[1]),
+            List.of(v[0], v[4], v[5], v[8], v[9], v[10], /*v[15],*/ v[17], v[18], v[20], v[21]),
     };
 
     public static Set<Vertex> startVertices(int index) {
@@ -184,6 +192,34 @@ public class ExampleGraphs {
         G.put(v[2], List.of(v[3]));
         G.put(v[3], List.of(v[2]));
         G.put(v[4], List.of(v[4]));
+
+        return new Graph<>(G);
+    }
+
+    public static Graph<Vertex> buildPerlbench() {
+        Map<Vertex, List<Vertex>> G = new HashMap<>();
+        G.put(v[0], List.of());
+        G.put(v[1], List.of(v[0]));
+        G.put(v[2], List.of(v[0], v[1]));
+        G.put(v[3], List.of(v[2]));
+        G.put(v[4], List.of(v[2],v[3]));
+        G.put(v[5], List.of(v[0],v[4]));
+        G.put(v[6], List.of(v[5]));
+        G.put(v[7],List.of(v[5], v[6]));
+        G.put(v[8], List.of(v[7]));
+        G.put(v[9],List.of(v[7], v[8]));
+        G.put(v[10],List.of(v[0], v[9]));
+        G.put(v[11],List.of(v[10]));
+        G.put(v[12],List.of(v[10], v[11]));
+        G.put(v[13],List.of(v[12]));
+        G.put(v[14],List.of(v[12], v[13]));
+        G.put(v[15],List.of(v[10], v[14]));
+        G.put(v[16],List.of(v[10]));
+        G.put(v[17],List.of(v[15], v[16]));
+        G.put(v[18],List.of(v[10], v[17]));
+        G.put(v[19],List.of(v[0]));
+        G.put(v[20],List.of(v[18], v[19]));
+        G.put(v[21],List.of(v[20]));
 
         return new Graph<>(G);
     }
