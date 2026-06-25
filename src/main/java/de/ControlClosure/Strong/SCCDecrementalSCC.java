@@ -128,8 +128,6 @@ public class SCCDecrementalSCC implements StrongControlClosure{
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;
         while ((scc = dscc.SCCs().prev(lastMoved)) != null){
-            sccSizes.add(scc.size());                                           // Statistics
-
             Set<Vertex> ThetaHatSCC = ThetaHat.getOrDefault(scc,new HashSet<>());
 
             // Currently ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc), which means for a single-vertex SCC that
@@ -141,6 +139,8 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                     || (ThetaHatSCC.size() == 1 && GraphUtils.isFinal(SetUtils.getFirst(Boundary.get(scc)), P, G)) // incomplete predicate
                     || (ThetaHatSCC.size() == 1 && GraphUtils.hasSelfLoop(SetUtils.getFirst(Boundary.get(scc)), G)) ) // complete path, bc incomplete predicate
             { // O(1)
+                sccSizes.add(scc.size());                                           // Statistics
+
                 Set<Vertex> B = Boundary.get(scc); // always exists O(1)
                 Set<Vertex> C = CompletePath.getOrDefault(scc,new HashSet<>()); // O(1)
 
@@ -158,7 +158,7 @@ public class SCCDecrementalSCC implements StrongControlClosure{
 
                 int sccCountAfter = dscc.sccCount();                            // Statistics
                 int sccCountDiff = sccCountAfter - sccCountBefore;              // Statistics
-                newSCCCounts.add(sccCountDiff);                                 // Statistics
+                newSCCCounts.add(sccCountDiff+1);                                 // Statistics
                 // Statistics: Determine largest size of newly created SCC
                 if (sccCountDiff > 0) {
                     int largest = 0;

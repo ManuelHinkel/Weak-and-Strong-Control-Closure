@@ -91,9 +91,9 @@ public class WCCDecrementalSCC implements WeakControlClosure{
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;
         while ((scc = dscc.SCCs().prev(lastMoved)) != null){
-            sccSizes.add(scc.size());                                           // Statistics
-
             if (ThetaHat.getOrDefault(scc, new HashSet<>()).size() >= 2) { // O(1)
+                sccSizes.add(scc.size());                                           // Statistics
+
                 Set<Vertex> B = Boundary.getOrDefault(scc, new HashSet<>()); // O(1)
                 assert Collections.disjoint(X,B);
                 X.addAll(B);    // O(X) in total
@@ -105,7 +105,7 @@ public class WCCDecrementalSCC implements WeakControlClosure{
 
                 int sccCountAfter = dscc.sccCount();                            // Statistics
                 int sccCountDiff = sccCountAfter - sccCountBefore;              // Statistics
-                newSCCCounts.add(sccCountDiff);                                 // Statistics
+                newSCCCounts.add(sccCountDiff+1);                                 // Statistics
                 // Statistics: Determine largest size of newly created SCC
                 if (sccCountDiff > 0) {
                     int largest = 0;
