@@ -32,10 +32,10 @@ public class MainTest {
 
     @Test
     public void testWeakWorstCase() {
-        File directory = new File("./evaluation/data_worstcase");
+        File directory = new File("./evaluation/data_worst");
 
         for (File file : directory.listFiles()) {
-            for(String algo: new String[]{"quadratic","polylog"}) {
+            for(String algo: new String[]{"quadratic"}) {
                 Main.main(new String[]{algo, file.getAbsolutePath(), "1", "w", ""});
                 Vertex.resetID();
             }

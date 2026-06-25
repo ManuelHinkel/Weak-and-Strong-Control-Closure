@@ -183,7 +183,7 @@ public class Graph<T> {
 
     protected void computeNSL() {
         for(T v: adjacencyList.keySet()) {
-            List<T> targetNSL = new ArrayList<>();
+            List<T> targetNSL = new ArrayList<>(adjacencyList.get(v).size());
             for(T t: adjacencyList.get(v)) {
                 if (!v.equals(t)) {
                     targetNSL.add(t);
@@ -193,7 +193,7 @@ public class Graph<T> {
         }
 
         for(T v: reversedAdjacencyList.keySet()) {
-            List<T> originNSL = new ArrayList<>();
+            List<T> originNSL = new ArrayList<>(reversedAdjacencyList.get(v).size());
             for(T o: reversedAdjacencyList.get(v)) {
                 if (!v.equals(o)) {
                     originNSL.add(o);
