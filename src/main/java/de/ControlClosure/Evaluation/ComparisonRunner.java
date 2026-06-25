@@ -63,7 +63,14 @@ public class ComparisonRunner {
             for(int i = 0; i < repetitions; i++) {
                 statistics = new Statistics(fileName, "Quadratic");
                 Set<Vertex> res = new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P, statistics, false);
-                if (!res.equals(Xstrong)) throw new RuntimeException("Result is not the strong control closure");
+                if (!res.equals(Xstrong)) {
+                    System.out.println("G: " + G);
+                    System.out.println("V': " + Vprime);
+                    System.out.println("P: " + P);
+                    System.out.println("Expected: " + Xstrong);
+                    System.out.println("Actual: " + res);
+                    throw new RuntimeException("Result is not the strong control closure");
+                }
                 lStrong.add(statistics);
             }
             Statistics averageStrong = statistics.average(lStrong);
