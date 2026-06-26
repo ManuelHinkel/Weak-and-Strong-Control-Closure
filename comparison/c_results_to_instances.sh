@@ -10,6 +10,6 @@ OUT_DIR="instances/${C_SUB_DIR}"
 
 echo "$OUT_DIR"
 
-./compile.sh
+#./compile.sh
 
  java -cp ./../target/classes de.ControlClosure.Evaluation.Parser "$RESULT_DIR" "$OUT_DIR"
