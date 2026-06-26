@@ -5,8 +5,8 @@ OUT_DIR="data_worst"
 mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
-kMin=40000
-kMax=80001
+kMin=10000
+kMax=60001
 kStep=2000
 
 
