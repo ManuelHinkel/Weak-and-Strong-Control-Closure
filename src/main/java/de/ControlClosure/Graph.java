@@ -2,14 +2,15 @@ package de.ControlClosure;
 
 
 import de.ControlClosure.DSCC.Bernstein.Node;
+import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
 
 import java.util.*;
 
 public class Graph<T> {
-    public Map<T, List<T>> adjacencyList = new HashMap<>();
-    public Map<T, List<T>> reversedAdjacencyList = new HashMap<>();
-    public Map<T, List<T>> adjacencyListNSL = new HashMap<>();
-    public Map<T, List<T>> reversedAdjacencyListNSL = new HashMap<>();
+    public Map<T, HashList<T>> adjacencyList = new HashMap<>();
+    public Map<T, HashList<T>> reversedAdjacencyList = new HashMap<>();
+    public Map<T, HashList<T>> adjacencyListNSL = new HashMap<>();
+    public Map<T, HashList<T>> reversedAdjacencyListNSL = new HashMap<>();
 
     // To avoid using super
     public Graph() {}
@@ -41,23 +42,23 @@ public class Graph<T> {
         return adjacencyList.isEmpty();
     }
 
-    public List<T> outgoing(T v) {
+    public HashList<T> outgoing(T v) {
         assert adjacencyList.containsKey(v);
         return adjacencyList.get(v);
     }
 
-    public List<T> incoming(T v) {
+    public HashList<T> incoming(T v) {
         assert reversedAdjacencyList.containsKey(v);
         return reversedAdjacencyList.get(v);
     }
 
-    public List<T> outgoingNSL(T v) {
+    public HashList<T> outgoingNSL(T v) {
         assert adjacencyList.containsKey(v);
         assert adjacencyListNSL.containsKey(v);
         return adjacencyListNSL.get(v);
     }
 
-    public List<T> incomingNSL(T v) {
+    public HashList<T> incomingNSL(T v) {
         assert reversedAdjacencyList.containsKey(v);
         assert reversedAdjacencyListNSL.containsKey(v);
         return reversedAdjacencyListNSL.get(v);
@@ -85,10 +86,10 @@ public class Graph<T> {
     }
 
     public void addVertex(T v) {
-        adjacencyList.put(v, new ArrayList<>());
-        reversedAdjacencyList.put(v, new ArrayList<>());
-        adjacencyListNSL.put(v, new ArrayList<>());
-        reversedAdjacencyListNSL.put(v, new ArrayList<>());
+        adjacencyList.put(v, new HashList<>());
+        reversedAdjacencyList.put(v, new HashList<>());
+        adjacencyListNSL.put(v, new HashList<>());
+        reversedAdjacencyListNSL.put(v, new HashList<>());
     }
 
     public void redirectOut(T origin, T target, T newOrigin) {
@@ -145,13 +146,14 @@ public class Graph<T> {
 
         for (T v : restrictedTo) {
             // Forward edges
-            List<T> inducedNeighbors =
-                    adjacencyList.getOrDefault(v, new ArrayList<>())
-                            .stream()
-                            .filter(restrictedTo::contains)
-                            .toList();
+            HashList<T> inducedNeighbors = new HashList<>();
+            for(T t: adjacencyList.get(v)) {
+                if (restrictedTo.contains(t)) {
+                    inducedNeighbors.addLast(t);
+                }
+            }
 
-            induced.adjacencyList.put(v, new ArrayList<>(inducedNeighbors));
+            induced.adjacencyList.put(v, inducedNeighbors);
         }
         induced.computeReversedAdjacencyList();
         induced.computeNSL();
@@ -160,18 +162,22 @@ public class Graph<T> {
     }
 
     public Graph<T> clone() {
-        return new Graph<>(this.adjacencyList);
+        Map<T, List<T>> clone = new HashMap<>();
+        for(T k: this.adjacencyList.keySet()) {
+            clone.put(k, this.adjacencyList.get(k).toList());
+        }
+        return new Graph<>(clone);
     }
 
     private void cloneAdjacencyList(Map<T, List<T>> adjacencyList) {
         for(T u: adjacencyList.keySet()) {
-            this.adjacencyList.put(u, new ArrayList<>(adjacencyList.get(u)));
+            this.adjacencyList.put(u, new HashList<>(adjacencyList.get(u)));
         }
     }
 
     protected void computeReversedAdjacencyList() {
         for (T v : adjacencyList.keySet()) {
-            reversedAdjacencyList.put(v, new ArrayList<>());
+            reversedAdjacencyList.put(v, new HashList<>());
         }
 
         for (T from : adjacencyList.keySet()) {
@@ -183,7 +189,7 @@ public class Graph<T> {
 
     protected void computeNSL() {
         for(T v: adjacencyList.keySet()) {
-            List<T> targetNSL = new ArrayList<>(adjacencyList.get(v).size());
+            HashList<T> targetNSL = new HashList<>();
             for(T t: adjacencyList.get(v)) {
                 if (!v.equals(t)) {
                     targetNSL.add(t);
@@ -193,7 +199,7 @@ public class Graph<T> {
         }
 
         for(T v: reversedAdjacencyList.keySet()) {
-            List<T> originNSL = new ArrayList<>(reversedAdjacencyList.get(v).size());
+            HashList<T> originNSL = new HashList<>();
             for(T o: reversedAdjacencyList.get(v)) {
                 if (!v.equals(o)) {
                     originNSL.add(o);

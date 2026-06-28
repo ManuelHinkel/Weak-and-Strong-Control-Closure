@@ -110,10 +110,10 @@ public class GESTree <T extends Vertex>{
     public void delete(Set<T> vertices) {
         assert !vertices.contains(root());
         for (T v: vertices) {
-            for (T w: new ArrayList<>(G.outgoing(v))) {
+            for (T w: G.outgoing(v).toList()) {
                 delete(v, w);
             }
-            for (T u: new ArrayList<>(G.incoming(v))) {
+            for (T u: G.incoming(v).toList()) {
                 delete(u, v);
             }
         }

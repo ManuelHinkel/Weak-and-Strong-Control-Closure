@@ -36,7 +36,7 @@ public class GraphUtils {
             List<T> newOut = new ArrayList<>();
 
             if (!Vp.contains(r)) { // No E^+(Vp)
-                List<T> out = G.outgoing(r);
+                List<T> out = G.outgoing(r).toList();
 
                 for(T t: out) {
                     if (reachable.contains(t)) {
@@ -58,7 +58,7 @@ public class GraphUtils {
         Map<T, List<T>> H = new HashMap<>();
 
         for (T x: G.vertices()) {
-            List<T> successors = G.outgoing(x);
+            List<T> successors = G.outgoing(x).toList();
 
             List<T> filtered = new ArrayList<>();
             if (!X.contains(x)) {
@@ -104,7 +104,7 @@ public class GraphUtils {
             changed = false;
 
             for(T u: g.vertices()) {
-                Set<T> targets = new HashSet<>(g.outgoing(u));
+                Set<T> targets = new HashSet<>(g.outgoing(u).toList());
                 for(T v: targets) {
                     if (X.contains(v) && !X.contains(u)) {
                         g.delete(u,v);
@@ -149,7 +149,7 @@ public class GraphUtils {
             }
         }
 
-        List<Set<T>> sccs = new Tarjan<T>().run(H).stream().map(SCC::vertices).toList();
+        List<Set<T>> sccs = new Tarjan<T>().run(H, H.vertices()).stream().map(SCC::vertices).toList();
 
         if (new HashSet<>(sccs).equals(new HashSet<>(P))) {
             return true;

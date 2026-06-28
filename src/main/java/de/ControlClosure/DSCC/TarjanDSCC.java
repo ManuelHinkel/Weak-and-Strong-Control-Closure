@@ -53,7 +53,7 @@ public class TarjanDSCC implements DecrementalSCC {
     @Override
     public void delete(Set<Vertex> Vp) {
         for(Vertex u: Vp) {
-            List<Vertex> out = new ArrayList<>(G.outgoing(u));
+            List<Vertex> out = G.outgoing(u).toList();
             for (Vertex v: out) {
                 delete(u,v);
             }

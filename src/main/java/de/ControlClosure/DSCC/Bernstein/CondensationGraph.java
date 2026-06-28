@@ -1,6 +1,7 @@
 package de.ControlClosure.DSCC.Bernstein;
 
 
+import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
 import de.ControlClosure.Graph;
 import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
@@ -26,7 +27,7 @@ public class CondensationGraph extends Graph<Node> {
             Node Xv = vertexNodeMap.get(v);
 
             if (!adjacencyList.containsKey(Xv)) {
-                adjacencyList.put(Xv, new ArrayList<>());
+                adjacencyList.put(Xv, new HashList<>());
             }
 
             for(Vertex w: underlyingGraph.adjacencyList.get(v)) {

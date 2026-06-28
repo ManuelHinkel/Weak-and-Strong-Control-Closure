@@ -51,7 +51,7 @@ public class Instance {
             StringBuilder line = new StringBuilder();
             line.append(v.hashCode()).append(": ");
 
-            List<Vertex> adj = new ArrayList<>(G.outgoing(v));
+            List<Vertex> adj = G.outgoing(v).toList();
             adj.sort(Comparator.comparingInt(Object::hashCode));
 
             for(Vertex t: adj) {

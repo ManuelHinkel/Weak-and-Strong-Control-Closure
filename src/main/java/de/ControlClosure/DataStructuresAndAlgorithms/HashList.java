@@ -32,6 +32,7 @@ public class HashList<T> implements Iterable<T>  {
     }
 
     private Node<T> get(T value) {
+        if (!nodeMap.containsKey(value)) return null;
         return nodeMap.get(value).peek();
     }
 
@@ -45,6 +46,16 @@ public class HashList<T> implements Iterable<T>  {
 
     public boolean contains(T value) {
         return nodeMap.containsKey(value);
+    }
+
+    public HashList() {}
+
+    public HashList(List<T> l) {
+        addAllLast(l);
+    }
+
+    public void add(T value) {
+        addLast(value);
     }
 
     public void addLast(T value) {

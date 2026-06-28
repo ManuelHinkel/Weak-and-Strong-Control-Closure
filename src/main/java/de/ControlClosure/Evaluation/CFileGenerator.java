@@ -54,7 +54,7 @@ public class CFileGenerator {
 
             sb.append("B").append(v.id).append(":").append(System.lineSeparator());
 
-            List<Vertex> successors = G.outgoing(v);
+            List<Vertex> successors = G.outgoing(v).toList();
             if (successors.isEmpty()) {
 
                 sb.append("    return;").append(System.lineSeparator());
