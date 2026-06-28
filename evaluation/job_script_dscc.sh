@@ -11,5 +11,7 @@ flags=("quadratic" "polylog")
 group=$(( (SLURM_ARRAY_TASK_ID -1) / 2 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 2 ))
 
-java -Xmx60g -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "1" "$ALGORITHM" "$FLAG"
+
+java -Xss2g -Xmx64g -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "1" "$ALGORITHM" "$FLAG"
+
 

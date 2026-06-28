@@ -8,7 +8,7 @@ import java.util.*;
 public class TarjanIterative<T> extends Tarjan<T> {
 
     @Override
-    public List<SCC<T>> run(Graph<T> G) {
+    public List<SCC<T>> run(Graph<T> G, Set<T> restrictedTo) {
         currentIndex = 0;
         number = new HashMap<>();
         lowLink = new HashMap<>();
@@ -17,9 +17,9 @@ public class TarjanIterative<T> extends Tarjan<T> {
         stronglyConnectedComponents = new LinkedList<>();
         graph = G;
 
-        for (T v : graph.vertices()) {
+        for (T v : restrictedTo) {
             if (!number.containsKey(v)) {
-                strongConnect(v);
+                strongConnect(v, restrictedTo);
             }
         }
 
@@ -27,7 +27,7 @@ public class TarjanIterative<T> extends Tarjan<T> {
     }
 
 
-    private void strongConnect(T start) {
+    private void strongConnect(T start, Set<T> restrictedTo) {
         class Frame {
             T vertex;
             Iterator<T> outgoingIterator;
@@ -64,7 +64,14 @@ public class TarjanIterative<T> extends Tarjan<T> {
                     stack.push(w);
                     onStack.put(w, true);
 
-                    dfsStack.push(new Frame(w, graph.outgoing(w).iterator()));
+                    List<T> outR = new ArrayList<>();
+                    for(T z: graph.outgoing(w)) {
+                        if (restrictedTo.contains(z)) {
+                            outR.add(z);
+                        }
+                    }
+
+                    dfsStack.push(new Frame(w, outR.iterator()));
                 } else if (number.get(w) < number.get(v)) { // Same as in recursive version
                     if (onStack.getOrDefault(w, false)) {
                         lowLink.put(v, Math.min(lowLink.get(v), number.get(w)));

@@ -6,7 +6,7 @@ mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
 kMin=10000
-kMax=60001
+kMax=80001
 kStep=2000
 
 

@@ -2,9 +2,7 @@ package de.ControlClosure.Strong;
 
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
-import de.ControlClosure.DataStructuresAndAlgorithms.Tarjan;
 import de.ControlClosure.Graph;
-import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 import org.junit.jupiter.api.Test;
 

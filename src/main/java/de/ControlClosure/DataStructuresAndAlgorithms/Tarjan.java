@@ -16,7 +16,7 @@ public class Tarjan<T> {
 
     protected Graph<T> graph;
 
-    public List<SCC<T>> run(Graph<T> G) {
+    public List<SCC<T>> run(Graph<T> G, Set<T> restrictedTo) {
         currentIndex = 0;
         number = new HashMap<>();
         lowLink = new HashMap<>();
@@ -25,9 +25,9 @@ public class Tarjan<T> {
         stronglyConnectedComponents = new LinkedList<>();
 
         graph = G;
-        for (T v : graph.vertices()) {
+        for (T v : restrictedTo) {
             if (!number.containsKey(v)) {
-                strongConnect(v);
+                strongConnect(v, restrictedTo);
             }
             stack.clear();
             onStack.clear();
@@ -36,7 +36,7 @@ public class Tarjan<T> {
         return stronglyConnectedComponents;
     }
 
-    private void strongConnect(T v) {
+    private void strongConnect(T v, Set<T> restrictedTo) {
         number.put(v, currentIndex);
         lowLink.put(v, currentIndex);
         currentIndex++;
@@ -45,8 +45,9 @@ public class Tarjan<T> {
         onStack.put(v, true);
 
         for (T w : graph.outgoing(v)) {
+            if (!restrictedTo.contains(w)) continue;
             if (!number.containsKey(w)) {
-                strongConnect(w);
+                strongConnect(w, restrictedTo);
                 lowLink.put(v, Math.min(lowLink.get(v), lowLink.get(w)));
             } else if (number.get(w) < number.get(v)) {
                 if (onStack.getOrDefault(w, false)) {

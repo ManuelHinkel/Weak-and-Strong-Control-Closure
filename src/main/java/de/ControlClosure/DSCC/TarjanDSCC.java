@@ -8,7 +8,7 @@ import de.ControlClosure.DataStructuresAndAlgorithms.TarjanIterative;
 import java.util.*;
 
 public class TarjanDSCC implements DecrementalSCC {
-    private static final Tarjan<Vertex> TARJAN = new TarjanIterative<>();
+    private static final Tarjan<Vertex> TARJAN = new Tarjan<>();
 
     private HashList<SCC<Vertex>> sccs;
 
@@ -22,7 +22,7 @@ public class TarjanDSCC implements DecrementalSCC {
         sccMap = new HashMap<>();
 
         sccs = new HashList<>();
-        sccs.addAllLast(TARJAN.run(G));
+        sccs.addAllLast(TARJAN.run(G, G.vertices()));
         for(SCC<Vertex> scc: sccs) {
             for(Vertex v: scc.vertices()) {
                 sccMap.put(v, scc);
@@ -39,8 +39,7 @@ public class TarjanDSCC implements DecrementalSCC {
 
         if (!sccu.equals(sccv)) return;
 
-        Graph<Vertex> Gi = G.induced(sccu.vertices());
-        List<SCC<Vertex>> newSCCs = TARJAN.run(Gi);
+        List<SCC<Vertex>> newSCCs = TARJAN.run(G, sccu.vertices());
 
         for(SCC<Vertex> scc: newSCCs) {
             for(Vertex x: scc.vertices()) {
