@@ -8,13 +8,13 @@ import java.util.*;
 public class TarjanIterative<T> extends Tarjan<T> {
 
     @Override
-    public List<SCC<T>> run(Graph<T> G, Set<T> restrictedTo) {
+    public HashList<SCC<T>> run(Graph<T> G, Set<T> restrictedTo) {
         currentIndex = 0;
         number = new HashMap<>();
         lowLink = new HashMap<>();
         stack = new ArrayDeque<>();
         onStack = new HashMap<>();
-        stronglyConnectedComponents = new LinkedList<>();
+        stronglyConnectedComponents = new HashList<>();
         graph = G;
 
         for (T v : restrictedTo) {
@@ -97,7 +97,7 @@ public class TarjanIterative<T> extends Tarjan<T> {
                         scc.add(w);
                     }
 
-                    stronglyConnectedComponents.add(0, new SCC<>(scc));
+                    stronglyConnectedComponents.addFirst(new SCC<>(scc));
                 }
             }
         }

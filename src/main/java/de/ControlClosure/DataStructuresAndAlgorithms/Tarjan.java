@@ -8,29 +8,27 @@ import java.util.*;
 public class Tarjan<T> {
     protected int currentIndex = 0;
 
-    protected Map<T, Integer> number;
-    protected Map<T, Integer> lowLink;
-    protected Deque<T> stack ;
-    protected Map<T, Boolean> onStack;
-    protected List<SCC<T>> stronglyConnectedComponents;
+    protected Map<T, Integer> number = new HashMap<>();
+    protected Map<T, Integer> lowLink = new HashMap<>();
+    protected Deque<T> stack = new ArrayDeque<>();
+    protected Map<T, Boolean> onStack = new HashMap<>();
+    protected HashList<SCC<T>> stronglyConnectedComponents = new HashList<>();
 
     protected Graph<T> graph;
 
-    public List<SCC<T>> run(Graph<T> G, Set<T> restrictedTo) {
+    public HashList<SCC<T>> run(Graph<T> G, Set<T> restrictedTo) {
         currentIndex = 0;
-        number = new HashMap<>();
-        lowLink = new HashMap<>();
-        stack = new ArrayDeque<>();
-        onStack = new HashMap<>();
-        stronglyConnectedComponents = new LinkedList<>();
+        number.clear();
+        lowLink.clear();
+        stack.clear();
+        onStack.clear();
+        stronglyConnectedComponents.clear();
 
         graph = G;
         for (T v : restrictedTo) {
             if (!number.containsKey(v)) {
                 strongConnect(v, restrictedTo);
             }
-            stack.clear();
-            onStack.clear();
         }
 
         return stronglyConnectedComponents;
@@ -67,7 +65,7 @@ public class Tarjan<T> {
                 scc.add(w);
             }
 
-            stronglyConnectedComponents.add(0,new SCC<>(scc));
+            stronglyConnectedComponents.addFirst(new SCC<>(scc));
         }
     }
 }

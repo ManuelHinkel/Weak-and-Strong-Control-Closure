@@ -39,7 +39,7 @@ public class TarjanDSCC implements DecrementalSCC {
 
         if (!sccu.equals(sccv)) return;
 
-        List<SCC<Vertex>> newSCCs = TARJAN.run(G, sccu.vertices());
+        HashList<SCC<Vertex>> newSCCs = TARJAN.run(G, sccu.vertices());
 
         for(SCC<Vertex> scc: newSCCs) {
             for(Vertex x: scc.vertices()) {

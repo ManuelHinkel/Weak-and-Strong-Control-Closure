@@ -18,6 +18,18 @@ public class HashList<T> implements Iterable<T>  {
     private Node<T> head;
     private Node<T> tail;
 
+    public HashList() {}
+
+    public HashList(List<T> l) {
+        addAllLast(l);
+    }
+
+    public void clear() {
+        nodeMap.clear();
+        head = null;
+        tail = null;
+    }
+
 
     private void put(T value, Node<T> node) {
         if (!nodeMap.containsKey(value)) {
@@ -46,12 +58,6 @@ public class HashList<T> implements Iterable<T>  {
 
     public boolean contains(T value) {
         return nodeMap.containsKey(value);
-    }
-
-    public HashList() {}
-
-    public HashList(List<T> l) {
-        addAllLast(l);
     }
 
     public void add(T value) {
@@ -171,6 +177,36 @@ public class HashList<T> implements Iterable<T>  {
         } else {
             insertAfterMultiple(prev.value, values);
         }
+    }
+
+    public void replace(T target, HashList<T> values) {
+        Node<T> nodeToReplace = get(target);
+        Node<T> prev = nodeToReplace.prev;
+        Node<T> next = nodeToReplace.next;
+        remove(target);
+
+        for(T v: values.nodeMap.keySet()) {
+            Stack<Node<T>> s = values.nodeMap.get(v);
+            while(!s.isEmpty()) {
+                put(v, s.pop());
+            }
+        }
+
+        if (prev != null) {
+            prev.next = values.head;
+            values.head.prev = prev;
+        } else { // nodeToReplace was head
+            head = values.head;
+        }
+
+        if (next != null) {
+            next.prev = values.tail;
+            values.tail.next = next;
+        } else { // nodeToReplace was tail
+            tail = values.tail;
+        }
+
+        values.clear();
     }
 
     public T prev(T current) {

@@ -149,7 +149,7 @@ public class GraphUtils {
             }
         }
 
-        List<Set<T>> sccs = new Tarjan<T>().run(H, H.vertices()).stream().map(SCC::vertices).toList();
+        List<Set<T>> sccs = new Tarjan<T>().run(H, H.vertices()).toList().stream().map(SCC::vertices).toList();
 
         if (new HashSet<>(sccs).equals(new HashSet<>(P))) {
             return true;
