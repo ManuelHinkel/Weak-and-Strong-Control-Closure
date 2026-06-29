@@ -35,9 +35,8 @@ public class WCCDecrementalSCC implements WeakControlClosure{
 
                 dscc.delete(B); // O(T(n)) in total
 
-                // Ensure that it is empty because DSCC might reuse same SCC object
-                ThetaHat.put(scc, new HashSet<>());
-                Boundary.put(scc, new HashSet<>());
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
             } else { // Propagate (move from L to R)
                 // Currently, ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc)
                 if (scc.size() == 1 && X.contains(scc.first())) {
@@ -66,6 +65,8 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                         }
                     }
                 }
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
                 lastMoved = scc;
             }
         }
@@ -120,9 +121,8 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                     largestNewSCCToCurrentRatios.add(ratio);
                 }
 
-                // Ensure that it is empty because DSCC might reuse same SCC object
-                ThetaHat.put(scc, new HashSet<>());
-                Boundary.put(scc, new HashSet<>());
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
             } else { // Propagate (move from L to R)
                 // Currently, ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc)
                 if (scc.size() == 1 && X.contains(scc.first())) {
@@ -151,6 +151,8 @@ public class WCCDecrementalSCC implements WeakControlClosure{
                         }
                     }
                 }
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
                 lastMoved = scc;
             }
         }

@@ -52,10 +52,9 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                 X.addAll(union);    // O(X) in total
                 dscc.delete(union); // O(T(n)) in total
 
-                // Ensure that it is empty because DSCC might reuse same SCC object
-                ThetaHat.put(scc, new HashSet<>());
-                Boundary.put(scc, new HashSet<>());
-                CompletePath.put(scc, new HashSet<>());
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
+                CompletePath.remove(scc);
             } else { // Propagate (move from L to R)
                 // Currently, ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc)
                 if (scc.size() == 1 && X.contains(scc.first())) {
@@ -103,6 +102,9 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                         }
                     }
                 }
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
+                CompletePath.remove(scc);
                 lastMoved=scc;
             }
         }
@@ -173,10 +175,9 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                     largestNewSCCToCurrentRatios.add(ratio);
                 }
 
-                // Ensure that it is empty because DSCC might reuse same SCC object
-                ThetaHat.put(scc, new HashSet<>());
-                Boundary.put(scc, new HashSet<>());
-                CompletePath.put(scc, new HashSet<>());
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
+                CompletePath.remove(scc);
             } else { // Propagate (move from L to R)
                 // Currently, ThetaHat(scc) stores \hat{\Theta}(R,X \cap R,scc)
                 if (scc.size() == 1 && X.contains(scc.first())) {
@@ -224,6 +225,9 @@ public class SCCDecrementalSCC implements StrongControlClosure{
                         }
                     }
                 }
+                ThetaHat.remove(scc);
+                Boundary.remove(scc);
+                CompletePath.remove(scc);
                 lastMoved=scc;
             }
         }

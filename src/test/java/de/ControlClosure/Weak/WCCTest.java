@@ -36,7 +36,7 @@ public class WCCTest {
     @Test
     public void testQuadraticTime(){
         assert false; // Test if Assertions are disabled
-        Tuple<Graph<Vertex>,Set<Vertex>> res = GraphGenerator.makeQuadraticDSCCGraph(100);
+        Tuple<Graph<Vertex>,Set<Vertex>> res = GraphGenerator.makeQuadraticDSCCGraph(50000);
 
         Graph<Vertex> G = res.first;
         Set<Vertex> Vp = res.second;
