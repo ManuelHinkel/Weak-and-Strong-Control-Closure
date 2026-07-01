@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class SetUtils {
     public static <T> T getFirst(Set<T> s) {
-        return s.iterator().next(); // O(1) for LinkedHashSet impl
+        return s.iterator().next(); 
     }
 
     public static <T> boolean isSubset(Set<T> set, Set<T> superset) {
@@ -20,10 +20,8 @@ public class SetUtils {
         return true;
     }
 
-    public static int seed;
-
     public static <V> V pickRandom(Set<V> vertices) {
-        Random r = new Random(seed);
+        Random r = new Random();
         int index = r.nextInt(vertices.size());
 
         int i = 0;

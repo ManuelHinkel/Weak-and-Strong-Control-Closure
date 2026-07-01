@@ -22,5 +22,5 @@ echo "$OUT_DIR"
 
 #./compile.sh
 
-n=$(($(ls $DATA_DIR -1 | wc -l) * 1))
+n=$(($(ls $DATA_DIR -1 | wc -l) * 2))
 sbatch --array=1-$n -n 1 -N 1 --exclusive -p infosun --constraint=chimaira --output="./${OUT_DIR}/slurm-%A_%a.out" --mem=63G  ./job_script_dscc.sh "$DATA_DIR" "$ALGORITHM" "$FLAG"
