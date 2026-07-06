@@ -223,4 +223,23 @@ public class ExampleGraphs {
 
         return new Graph<>(G);
     }
+
+    public static Graph<Vertex> buildNonCFG() {
+        Map<Vertex, List<Vertex>> G = new HashMap<>();
+        G.put(v[0], List.of(v[1]));
+        G.put(v[1], List.of(v[2],v[3],v[4]));
+        G.put(v[2], List.of());
+        G.put(v[3], List.of());
+        G.put(v[4], List.of());
+
+        return new Graph<>(G);
+    }
+
+    public static Set<Vertex> nonCFGVp() {
+        return new HashSet<>(List.of(v[0],v[2]));
+    }
+
+    public static Set<Vertex> nonCFGF() {
+        return new HashSet<>(List.of(v[1]));
+    }
 }

@@ -12,16 +12,16 @@ echo "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 find "$OUT_DIR" -mindepth 1 -delete
 
-nMin=250
-nMax=2501
-nStep=250
+nMin=100000
+nMax=500000
+nStep=10000
 
-pMin=0.60
-pMax=0.91
-pStep=0.15
+pMin=0.75
+pMax=1.01
+pStep=0.25
 
 pPMin=0.1
-pPMax=0.71
+pPMax=0.11
 pPStep=0.3
 
 pFMin=0.0

@@ -3,7 +3,9 @@ package de.ControlClosure.Evaluation;
 import de.ControlClosure.DSCC.TarjanDSCC;
 import de.ControlClosure.Graph;
 import de.ControlClosure.Statistics.Statistics;
+import de.ControlClosure.Strong.SCCCubic;
 import de.ControlClosure.Strong.SCCDecrementalSCC;
+import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 import de.ControlClosure.Weak.WCCCubic;
 import de.ControlClosure.Weak.WCCDecrementalSCC;
@@ -12,9 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class ComparisonRunner {
@@ -45,6 +45,11 @@ public class ComparisonRunner {
             Set<Vertex> P = instance.P;
             Set<Vertex> Xweak = instance.weakControlClosure;
             Set<Vertex> Xstrong = instance.strongControlClosure;
+
+//            List<Vertex> sortedVertices = new ArrayList<>(Vprime);
+//            sortedVertices.sort(Comparator.comparingInt(v -> v.id));
+//            System.out.println(sortedVertices);
+//
 
             List<Statistics> lWeak = new ArrayList<>();
             List<Statistics> lStrong = new ArrayList<>();
@@ -84,12 +89,14 @@ public class ComparisonRunner {
                     + G.size() + ", "
                     + averageWeak.getRunningTimeMs()  + ", "
                     + averageStrong.getRunningTimeMs() + ", "
-                    + (notMatchingWeak ? "EXCEPTION" :  instance.wccTime) + ", "
-                    + (notMatchingStrong ? "EXCEPTION" :  instance.sccTime) + ", "
+                    + (notMatchingWeak ? "EXCEPTION" : "")  + instance.wccTime + ", "
+                    + (notMatchingStrong ? "EXCEPTION" : "") + instance.sccTime + ", "
                     + medianWeak.getRunningTimeMs() + ", "
                     + medianStrong.getRunningTimeMs() + ", "
                     + longestWeak.getRunningTimeMs() + ", "
-                    + longestStrong.getRunningTimeMs());
+                    + longestStrong.getRunningTimeMs() + ", "
+                    + GraphUtils.numberOfNonTrivialSCCs(G) + ", "
+                    + GraphUtils.isCFG(G));
         }
     }
 }

@@ -6,6 +6,7 @@ import de.ControlClosure.Graph;
 import de.ControlClosure.Vertex;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,5 +51,17 @@ public class SCCTest {
                 assertEquals(ExampleGraphs.expected(j), result);
             }
         }
+    }
+
+    @Test void testNoCFG() {
+        StrongControlClosureNoPredicate scc = new SCCNoPredicateDecrementalSCC(new TarjanDSCC());
+        Graph<Vertex> G = ExampleGraphs.buildNonCFG();
+        Set<Vertex> Vp = ExampleGraphs.nonCFGVp();
+        Set<Vertex> F = ExampleGraphs.nonCFGF();
+
+        Set<Vertex> result = scc.scc(G, Vp, F);
+        Set<Vertex> expected = new HashSet<>(Vp);
+        expected.addAll(F);
+        assertEquals(expected, result);
     }
 }

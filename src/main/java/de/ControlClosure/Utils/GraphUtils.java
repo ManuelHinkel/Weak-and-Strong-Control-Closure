@@ -1,5 +1,6 @@
 package de.ControlClosure.Utils;
 
+import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
 import de.ControlClosure.DataStructuresAndAlgorithms.Tarjan;
 import de.ControlClosure.Graph;
 import de.ControlClosure.SCC;
@@ -154,10 +155,6 @@ public class GraphUtils {
         if (new HashSet<>(sccs).equals(new HashSet<>(P))) {
             return true;
         } else {
-            System.out.println("\n ");
-            System.out.println(G);
-            System.out.println("Expected " + sccs);
-            System.out.println("Actual   " + P);
             return false;
         }
     }
@@ -203,5 +200,28 @@ public class GraphUtils {
             }
         }
         return true;
+    }
+
+    public static <T> boolean isCFG(Graph<T> G) {
+        for(T v: G.vertices()) {
+            if (G.outgoing(v).size() > 2) return false;
+        }
+        return true;
+    }
+
+    public static <T> int numberOfNonTrivialSCCs(Graph<T> G) {
+        HashList<SCC<T>> sccs = new Tarjan<T>().run(G, G.vertices());
+
+        int nonTrivialSCCs = 0;
+        for(SCC<T> scc: sccs) {
+            if (scc.size() > 1) {
+                nonTrivialSCCs++;
+            } else {
+                if (hasSelfLoop(scc.first(), G)) {
+                    nonTrivialSCCs++;
+                }
+            }
+        }
+        return nonTrivialSCCs;
     }
 }
