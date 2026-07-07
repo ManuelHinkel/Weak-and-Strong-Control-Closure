@@ -1,6 +1,7 @@
 package de.ControlClosure.Evaluation;
 
 import de.ControlClosure.DSCC.TarjanDSCC;
+import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 import de.ControlClosure.Graph;
 import de.ControlClosure.Optimized.WCCOpt;
 import de.ControlClosure.Statistics.Statistics;
@@ -84,6 +85,8 @@ public class ComparisonRunner {
             Statistics medianStrong = statistics.medianRunningTime(lStrong);
             Statistics longestStrong = statistics.longestRunningTime(lStrong);
 
+            Tuple<Integer, Integer> nonTrivialStat = GraphUtils.nonTrivialSCCNumberAndLargest(G);
+
             System.out.println(fileName + ", "
                     + G.size() + ", "
                     + averageWeak.getRunningTimeMs()  + ", "
@@ -94,7 +97,8 @@ public class ComparisonRunner {
                     + medianStrong.getRunningTimeMs() + ", "
                     + longestWeak.getRunningTimeMs() + ", "
                     + longestStrong.getRunningTimeMs() + ", "
-                    + GraphUtils.numberOfNonTrivialSCCs(G) + ", "
+                    + nonTrivialStat.first + ", "
+                    + nonTrivialStat.second + ", "
                     + GraphUtils.maxOutDegree(G));
         }
     }

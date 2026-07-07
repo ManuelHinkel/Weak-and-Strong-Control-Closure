@@ -222,19 +222,19 @@ public class GraphUtils {
         return max;
     }
 
-    public static <T> int numberOfNonTrivialSCCs(Graph<T> G) {
+    public static <T> Tuple<Integer, Integer> nonTrivialSCCNumberAndLargest(Graph<T> G) {
         HashList<SCC<T>> sccs = new Tarjan<T>().run(G, G.vertices());
 
         int nonTrivialSCCs = 0;
+        int largest = 0;
         for(SCC<T> scc: sccs) {
-            if (scc.size() > 1) {
+            if (scc.size() > 1 || hasSelfLoop(scc.first(), G)) {
                 nonTrivialSCCs++;
-            } else {
-                if (hasSelfLoop(scc.first(), G)) {
-                    nonTrivialSCCs++;
+                if (scc.size() > largest) {
+                    largest = scc.size();
                 }
             }
         }
-        return nonTrivialSCCs;
+        return new Tuple<>(nonTrivialSCCs, largest);
     }
 }
