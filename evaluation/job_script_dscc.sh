@@ -12,6 +12,6 @@ group=$(( (SLURM_ARRAY_TASK_ID -1) / 1 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 1 ))
 
 
-java -Xss512m -Xmx60g -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "1" "$ALGORITHM" "$FLAG"
+java -Xss512m -Xmx60g -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "20" "$ALGORITHM" "$FLAG"
 
 

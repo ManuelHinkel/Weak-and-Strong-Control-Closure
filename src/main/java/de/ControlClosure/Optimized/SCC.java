@@ -1,14 +1,15 @@
 package de.ControlClosure.Optimized;
 
 
-public class SCC {
-    private static int nextId = 0;
-    private final int id;
+import java.util.Set;
 
+public class SCC {
     public int[] vertices;
 
+    public Set<Integer> Theta;
+    public Set<Integer> B;
+
     public SCC(int[] vertices) {
-        this.id = nextId++;
         this.vertices = vertices;
     }
 
@@ -18,16 +19,6 @@ public class SCC {
 
     public int first() {
         return vertices[0];
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this.id == ((SCC) obj).id;
     }
 
     @Override

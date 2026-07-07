@@ -20,9 +20,9 @@ pMin=0.75
 pMax=0.76
 pStep=0.25
 
-pPMin=3
+pPMin=0.1
 pPMax=3.01
-pPStep=0.3
+pPStep=2.9
 
 pFMin=0.0
 pFMax=0.0
