@@ -20,7 +20,7 @@ pMin=0.75
 pMax=0.76
 pStep=0.25
 
-pPMin=0.1
+pPMin=3.0
 pPMax=3.01
 pPStep=2.9
 

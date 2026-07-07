@@ -3,6 +3,7 @@
 DATA_DIR="$1"
 ALGORITHM="$2"
 FLAG="$3"
+IND="$4"
 
 files=("$DATA_DIR"/*)
 #flags=("quadratic" "polylog", "optimized")
@@ -12,6 +13,6 @@ group=$(( (SLURM_ARRAY_TASK_ID -1) / 1 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 1 ))
 
 
-java -Xss512m -Xmx60g -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "20" "$ALGORITHM" "$FLAG"
+java -Xss512m -Xmx60g -cp ./../target/classes de.ControlClosure.Evaluation.Main  "${flags[offset]}" "${files[group]}" "20" "$ALGORITHM" "$FLAG" "$IND"
 
 
