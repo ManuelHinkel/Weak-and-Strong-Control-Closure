@@ -3,6 +3,7 @@ package de.ControlClosure.Evaluation;
 import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 import de.ControlClosure.Graph;
 import de.ControlClosure.Utils.IOUtils;
+import de.ControlClosure.Utils.SetUtils;
 import de.ControlClosure.Vertex;
 
 import java.util.*;
@@ -93,9 +94,19 @@ public class GraphGenerator {
 
     public static Set<Vertex> chooseVprime(Set<Vertex> V, double pPrime, Random r) {
         Set<Vertex> Vprime = new HashSet<>();
-        for(Vertex v: V) {
-            if (r.nextDouble() < pPrime) {
-                Vprime.add(v);
+        if (pPrime > 1.0) { // pick pPrime many vertices
+            Set<Vertex> Vcopy = new HashSet<>(V);
+            int k = (int) Math.round(pPrime);
+            for(int i = 0; i < k; i++) {
+                Vertex picked = SetUtils.pickRandom(Vcopy, r);
+                Vcopy.remove(picked);
+                Vprime.add(picked);
+            }
+        } else { // pick vertex with probability pPrime
+            for(Vertex v: V) {
+                if (r.nextDouble() < pPrime) {
+                    Vprime.add(v);
+                }
             }
         }
         return Vprime;

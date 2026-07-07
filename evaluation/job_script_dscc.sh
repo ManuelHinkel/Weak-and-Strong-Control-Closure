@@ -5,8 +5,8 @@ ALGORITHM="$2"
 FLAG="$3"
 
 files=("$DATA_DIR"/*)
-#flags=("quadratic" "polylog")
-flags=("quadratic")
+#flags=("quadratic" "polylog", "optimized")
+flags=("optimized")
 
 group=$(( (SLURM_ARRAY_TASK_ID -1) / 1 ))
 offset=$(( (SLURM_ARRAY_TASK_ID -1) % 1 ))

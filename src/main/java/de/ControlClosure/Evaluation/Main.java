@@ -10,6 +10,7 @@ import de.ControlClosure.Strong.SCCDecrementalSCC;
 import de.ControlClosure.Vertex;
 import de.ControlClosure.Weak.WCCCubic;
 import de.ControlClosure.Weak.WCCDecrementalSCC;
+import de.ControlClosure.Weak.WCCOptimized;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,6 +69,7 @@ public class Main {
         statistics = switch (algorithm) {
             case "cubic" -> new Statistics(fileName, "Cubic");
             case "quadratic" -> sccStats ? new DSCCStatistics(fileName, "Quadratic") : new Statistics(fileName, "Quadratic");
+            case "optimized" -> new Statistics(fileName, "Optimized");
             default ->  sccStats ? new DSCCStatistics(fileName, "Polylog") : new Statistics(fileName, "Polylog");
         };
         statistics.setNumVertices(g.size());
@@ -97,8 +99,6 @@ public class Main {
         System.out.println(statistics.average(l));
     }
 
-    public static String curfile;
-
     private static void run(Graph<Vertex> G, Set<Vertex> Vprime, Set<Vertex> P, String algorithm, boolean weak, Statistics statistics, boolean sccStats) {
         switch (algorithm) {
             case "cubic" -> {
@@ -113,6 +113,13 @@ public class Main {
                     new WCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime, statistics, sccStats);
                 } else {
                     new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P,statistics, sccStats);
+                }
+            }
+            case "optimized" -> {
+                if (weak) {
+                    new WCCOptimized().measure(G,Vprime, statistics, sccStats);
+                } else {
+                    //new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P,statistics, sccStats);
                 }
             }
             case "polylog" -> {

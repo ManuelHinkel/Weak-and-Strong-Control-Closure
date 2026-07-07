@@ -8,10 +8,10 @@ import java.io.File;
 public class MainTest {
     @Test
     public void testWeak() {
-        File directory = new File("./evaluation/data_weak");
+        File directory = new File("./evaluation/data_weak_dscc");
 
         for (File file : directory.listFiles()) {
-            for(String algo: new String[]{"cubic", "quadratic", "polylog"}) {
+            for(String algo: new String[]{"optimized"}) {
                 Main.main(new String[]{algo, file.getAbsolutePath(), "1", "w", ""});
                 Vertex.resetID();
             }

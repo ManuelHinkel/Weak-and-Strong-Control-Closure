@@ -20,8 +20,7 @@ public class SetUtils {
         return true;
     }
 
-    public static <V> V pickRandom(Set<V> vertices) {
-        Random r = new Random();
+    public static <V> V pickRandom(Set<V> vertices, Random r) {
         int index = r.nextInt(vertices.size());
 
         int i = 0;
@@ -30,6 +29,11 @@ public class SetUtils {
             i++;
         }
         return null;
+    }
+
+    public static <V> V pickRandom(Set<V> vertices) {
+        Random r = new Random();
+        return pickRandom(vertices, r);
     }
 
 
