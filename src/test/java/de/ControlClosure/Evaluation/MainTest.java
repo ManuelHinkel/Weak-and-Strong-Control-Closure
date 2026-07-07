@@ -12,7 +12,7 @@ public class MainTest {
 
         for (File file : directory.listFiles()) {
             for(String algo: new String[]{"optimized"}) {
-                Main.main(new String[]{algo, file.getAbsolutePath(), "1", "w", ""});
+                Main.main(new String[]{algo, file.getAbsolutePath(), "5", "w", "", "i"});
                 Vertex.resetID();
             }
         }

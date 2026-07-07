@@ -20,8 +20,8 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         assert false; // Test if Assertions are disabled
-        if (args.length != 5) {
-            throw new IllegalArgumentException("Expected [cubic|quadratic|polylog] [file] [repetitions] [w|s] [scc]!");
+        if (args.length != 6) {
+            throw new IllegalArgumentException("Expected [cubic|quadratic|polylog|optimized] [file] [repetitions] [w|s] [scc] [i]!");
         }
 
         Path filePath = Path.of(args[1]);
@@ -36,6 +36,7 @@ public class Main {
         int repetitions = Integer.parseInt(args[2]);
         boolean weak = args[3].equals("w");
         boolean sccStats = args[4].equals("scc");
+        boolean individualOut = args[5].equals("i");
 
         if (fileName.startsWith("Random")) { // Generate Random Graph
             String[] lines = content.split(System.lineSeparator());
@@ -45,7 +46,7 @@ public class Main {
             double pPrime = Double.parseDouble(lines[3].split("=",2)[1]);
             double pF = Double.parseDouble(lines[4].split("=",2)[1]);
 
-            runRandomGraph(fileName,seed,n,p,pPrime,pF,repetitions,algorithm,weak,sccStats);
+            runRandomGraph(fileName,seed,n,p,pPrime,pF,repetitions,algorithm,weak,sccStats,individualOut);
         } else { // Parse Graph
             Instance instance = Parser.parseInstance(content);
             Graph<Vertex> G = instance.G;
@@ -59,8 +60,9 @@ public class Main {
                 statistics = getStatistics(fileName, algorithm, G, sccStats);
                 run(G, Vprime, P, algorithm, weak, statistics, sccStats);
                 l.add(statistics);
+                if (individualOut) System.out.println(statistics);
             }
-            System.out.println(statistics.average(l));
+            if (!individualOut) System.out.println(statistics.average(l));
         }
     }
 
@@ -77,7 +79,10 @@ public class Main {
         return statistics;
     }
 
-    private static void runRandomGraph(String fileName, int seed, int n, double p, double pPrime, double pF, int reps, String algorithm, boolean weak, boolean sccStats) {
+    private static void runRandomGraph(
+            String fileName, int seed,
+            int n, double p, double pPrime, double pF,
+            int reps, String algorithm, boolean weak, boolean sccStats, boolean individualOut) {
         List<Statistics> l = new ArrayList<>();
         Statistics statistics = null;
 
@@ -95,8 +100,9 @@ public class Main {
 
             run(G,Vprime,P,algorithm,weak,statistics, sccStats);
             l.add(statistics);
+            if (individualOut) System.out.println(statistics);
         }
-        System.out.println(statistics.average(l));
+        if (!individualOut) System.out.println(statistics.average(l));
     }
 
     private static void run(Graph<Vertex> G, Set<Vertex> Vprime, Set<Vertex> P, String algorithm, boolean weak, Statistics statistics, boolean sccStats) {
