@@ -2,13 +2,16 @@ package de.ControlClosure.Evaluation;
 
 import de.ControlClosure.DSCC.TarjanDSCC;
 import de.ControlClosure.Graph;
+import de.ControlClosure.Optimized.WCCOpt;
 import de.ControlClosure.Statistics.Statistics;
 import de.ControlClosure.Strong.SCCCubic;
 import de.ControlClosure.Strong.SCCDecrementalSCC;
+import de.ControlClosure.Strong.SCCOptimized;
 import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 import de.ControlClosure.Weak.WCCCubic;
 import de.ControlClosure.Weak.WCCDecrementalSCC;
+import de.ControlClosure.Weak.WCCOptimized;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,10 +49,6 @@ public class ComparisonRunner {
             Set<Vertex> Xweak = instance.weakControlClosure;
             Set<Vertex> Xstrong = instance.strongControlClosure;
 
-//            List<Vertex> sortedVertices = new ArrayList<>(Vprime);
-//            sortedVertices.sort(Comparator.comparingInt(v -> v.id));
-//            System.out.println(sortedVertices);
-//
 
             List<Statistics> lWeak = new ArrayList<>();
             List<Statistics> lStrong = new ArrayList<>();
@@ -58,8 +57,8 @@ public class ComparisonRunner {
             boolean notMatchingWeak = false;
 
             for(int i = 0; i < repetitions; i++) {
-                statistics = new Statistics(fileName, "Quadratic");
-                Set<Vertex> res = new WCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime, statistics, false);
+                statistics = new Statistics(fileName, "Optimized");
+                Set<Vertex> res = new WCCOptimized().measure(G,Vprime, statistics, false);
                 lWeak.add(statistics);
                 if (!res.equals(Xweak)) {
                     notMatchingWeak = true;
@@ -73,8 +72,8 @@ public class ComparisonRunner {
             boolean notMatchingStrong = false;
 
             for(int i = 0; i < repetitions; i++) {
-                statistics = new Statistics(fileName, "Quadratic");
-                Set<Vertex> res = new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P, statistics, false);
+                statistics = new Statistics(fileName, "Optimized");
+                Set<Vertex> res = new SCCOptimized().measure(G,Vprime,P, statistics, false);
                 lStrong.add(statistics);
                 if (!res.equals(Xstrong)) {
                     notMatchingStrong = true;
@@ -96,7 +95,7 @@ public class ComparisonRunner {
                     + longestWeak.getRunningTimeMs() + ", "
                     + longestStrong.getRunningTimeMs() + ", "
                     + GraphUtils.numberOfNonTrivialSCCs(G) + ", "
-                    + GraphUtils.isCFG(G));
+                    + GraphUtils.maxOutDegree(G));
         }
     }
 }

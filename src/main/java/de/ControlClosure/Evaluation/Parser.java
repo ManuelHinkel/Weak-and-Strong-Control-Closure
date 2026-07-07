@@ -25,7 +25,7 @@ public class Parser {
         Instance instance = new Instance();
         Map<Vertex, List<Vertex>> G = new HashMap<>();
 
-        List<String> lines = Arrays.stream(content.split(System.lineSeparator())).toList();
+        List<String> lines = Arrays.stream(content.split("\n")).toList();
         List<String> adj = new ArrayList<>();
 
         List<Integer> Vprime = List.of();

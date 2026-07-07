@@ -3,6 +3,8 @@ package de.ControlClosure.Strong;
 import de.ControlClosure.DSCC.Bernstein.PolylogDSCC;
 import de.ControlClosure.DSCC.TarjanDSCC;
 import de.ControlClosure.Graph;
+import de.ControlClosure.Optimized.GraphFUtils;
+import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +47,7 @@ public class SCCTest {
             for (int j = 0; j < ExampleGraphs.graphs.length; j++) {
                 Graph<Vertex> G = ExampleGraphs.graphs[j];
                 Set<Vertex> Vp = ExampleGraphs.startVertices(j);
-                Set<Vertex> F = ExampleGraphs.finalVertices(j);
+                Set<Vertex> F = GraphUtils.finalVertices(ExampleGraphs.predicateVertices(j),G);
 
                 Set<Vertex> result = scc.scc(G, Vp, F);
                 assertEquals(ExampleGraphs.expected(j), result);
@@ -53,7 +55,8 @@ public class SCCTest {
         }
     }
 
-    @Test void testNoCFG() {
+    @Test
+    public void testNoCFG() {
         StrongControlClosureNoPredicate scc = new SCCNoPredicateDecrementalSCC(new TarjanDSCC());
         Graph<Vertex> G = ExampleGraphs.buildNonCFG();
         Set<Vertex> Vp = ExampleGraphs.nonCFGVp();

@@ -8,6 +8,7 @@ public class SCC {
 
     public Set<Integer> Theta;
     public Set<Integer> B;
+    public Set<Integer> C;
 
     public SCC(int[] vertices) {
         this.vertices = vertices;

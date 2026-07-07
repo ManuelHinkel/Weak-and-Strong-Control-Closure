@@ -38,9 +38,9 @@ public class WCCOptTest {
 
         WCCOpt wcc = new WCCOpt();
 
-        int rep = 20;
+        int rep = 3;
 
-        for(int i = 500_000; i <= 500_000; i+= 100_000) {
+        for(int i = 100_000; i <= 200_000; i+= 100_000) {
             long sum = 0;
             for(int j = 0; j < rep; j++) {
                 Graph<Vertex> G = GraphGenerator.randomCFG(i,0.75, r);

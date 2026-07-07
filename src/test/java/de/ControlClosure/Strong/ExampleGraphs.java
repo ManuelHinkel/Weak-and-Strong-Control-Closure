@@ -92,19 +92,6 @@ public class ExampleGraphs {
         return new HashSet<>(predicateVertices[index]);
     }
 
-    public static Set<Vertex> finalVertices(int index) {
-        Set<Vertex> F = new HashSet<>();
-        Set<Vertex> P = predicateVertices(index);
-        Graph<Vertex> G = graphs[index];
-
-        for(Vertex v: G.vertices()) {
-            if (GraphUtils.isFinal(v,P,G)) {
-                F.add(v);
-            }
-        }
-        return F;
-    }
-
     public static Set<Vertex> expected(int index) {
         return new HashSet<>(expectedResults[index]);
     }

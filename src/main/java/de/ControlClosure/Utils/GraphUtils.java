@@ -129,6 +129,16 @@ public class GraphUtils {
         return out;
     }
 
+    public static <T> Set<T> finalVertices( Set<T> P, Graph<T> G) {
+        Set<T> F = new HashSet<>();
+        for(T v: G.vertices()) {
+            if (isFinal(v,P,G)) {
+                F.add(v);
+            }
+        }
+        return F;
+    }
+
     public static <T> boolean isFinal(T v, Set<T> P, Graph<T> G) {
         if (P.contains(v)) { // predicate vertex
             return G.outgoing(v).size() < 2;
@@ -202,11 +212,14 @@ public class GraphUtils {
         return true;
     }
 
-    public static <T> boolean isCFG(Graph<T> G) {
+    public static <T> int maxOutDegree(Graph<T> G) {
+        int max = 0;
         for(T v: G.vertices()) {
-            if (G.outgoing(v).size() > 2) return false;
+            if (G.outgoing(v).size() > max) {
+                max = G.outgoing(v).size();
+            }
         }
-        return true;
+        return max;
     }
 
     public static <T> int numberOfNonTrivialSCCs(Graph<T> G) {

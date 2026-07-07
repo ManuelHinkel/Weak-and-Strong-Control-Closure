@@ -4,15 +4,21 @@ import de.ControlClosure.DataStructuresAndAlgorithms.Triple;
 
 import java.util.*;
 
-public class WCCOpt{
-
+public class SCCOpt {
     private static TarjanList TARJAN = new TarjanList();
 
-    public Set<Integer> wcc(GraphF G, Set<Integer> Vp) {
+    public Set<Integer> scc(GraphF G, Set<Integer> Vp, Set<Integer> F) {
         Triple<GraphF, int[], int[]> res = GraphFUtils.onlyReachableAndNoOutgoingEdges(G,Vp);
         GraphF H = res.first;
         int[] GtoH = res.second;
         int[] HtoG = res.third;
+
+        boolean[] isFinal = new boolean[H.size()];
+        for(int v: H.vertices) {
+            if (F.contains(HtoG[v])) {
+                isFinal[v] = true;
+            }
+        }
 
         Set<Integer> X = new HashSet<>();
         for(int vp: Vp) {
@@ -32,9 +38,22 @@ public class WCCOpt{
         while (!SCCs.isEmpty()) {
             SCC scc = SCCs.remove(SCCs.size()-1);
 
-            if (scc.Theta != null && scc.Theta.size() >= 2) {
+            Set<Integer> Theta = scc.Theta;
+            if (Theta != null && (
+                    Theta.size() >= 2
+                    || (Theta.size() == 1 && scc.C != null && !scc.C.isEmpty())
+                    || (Theta.size() == 1 && scc.size() > 1)
+                    || (Theta.size() == 1 && isFinal[scc.first()])
+                    || (Theta.size() == 1 && H.outgoing(scc.first()).contains(scc.first()))
+            )) {
                 X.addAll(scc.B);
                 H.deleteOut(scc.B);
+
+                if (scc.C != null) {
+                    X.addAll(scc.C);
+                    H.deleteOut(scc.C);
+                }
+
 
                 List<SCC> newSCCs = TARJAN.run(H, scc.vertices);
                 SCCs.addAll(newSCCs);
@@ -64,6 +83,23 @@ public class WCCOpt{
                                     sccInc.Theta = new HashSet<>();
                                 }
                                 sccInc.Theta.addAll(scc.Theta);
+                            }
+                        }
+                    }
+                }
+
+                if (scc.size() > 1
+                        || (scc.C != null && !scc.C.isEmpty())
+                        || H.outgoing(scc.first()).contains(scc.first())
+                        || (!X.contains(scc.first()) && isFinal[scc.first()])) {
+                    for(int v: scc.vertices) {
+                        for(int u: H.incoming(v)) {
+                            SCC sccInc = sccMap[u];
+                            if (!scc.equals(sccInc)) {
+                                if (sccInc.C == null) {
+                                    sccInc.C = new HashSet<>();
+                                }
+                                sccInc.C.add(u);
                             }
                         }
                     }

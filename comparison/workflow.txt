@@ -8,6 +8,3 @@
 
 ./main.sh C_SUB_DIR
 # runs our algorithm on all the instances in ./instances/C_SUB_DIR and writes the results in ./instance_results
-
-./sum.sh C_SUB_DIR
-# iterates over all the results in /instance_results/C_SUB_DIR and sums up the running times
