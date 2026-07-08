@@ -127,6 +127,8 @@ public class SCCDecrementalSCC implements StrongControlClosure{
         Graph<Vertex> H = GraphUtils.onlyReachableAndNoOutgoingEdges(G, Vp);
         dscc.initialize(H); // E^+(Vp) already removed
 
+        statistics.setPercentageOfOrigGraph(H.size() / (double) G.size());
+
         SCC<Vertex> lastMoved = null;
         SCC<Vertex> scc;
         while ((scc = dscc.SCCs().prev(lastMoved)) != null){

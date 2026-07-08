@@ -6,6 +6,7 @@ public class DSCCStatistics extends Statistics {
     protected double avgSCCSize;
     protected double avgNewSCCCount;
     protected double avgRatio;
+    protected double percentageOfOrigGraph;
 
     public DSCCStatistics(String file, String algorithm) {
         super(file, algorithm);
@@ -23,9 +24,17 @@ public class DSCCStatistics extends Statistics {
         this.avgRatio = avgRatio;
     }
 
+    public void setPercentageOfOrigGraph(double percentageOfOrigGraph) {
+        this.percentageOfOrigGraph = percentageOfOrigGraph;
+    }
+
     @Override
     public String toString() {
-        return super.toString() + ", " + avgSCCSize + ", " + avgNewSCCCount + ", " + avgRatio;
+        return super.toString() + ", "
+                + avgSCCSize + ", "
+                + avgNewSCCCount + ", "
+                + avgRatio + ", "
+                + percentageOfOrigGraph;
     }
 
     @Override
@@ -37,6 +46,7 @@ public class DSCCStatistics extends Statistics {
         double sumSize=0;
         double sumNew=0;
         double sumRatio=0;
+        double sumPercentage=0;
 
         for(Statistics s: statisticsList) {
             DSCCStatistics ds = (DSCCStatistics)s;
@@ -44,6 +54,7 @@ public class DSCCStatistics extends Statistics {
             sumSize += ds.avgSCCSize;
             sumNew += ds.avgNewSCCCount;
             sumRatio += ds.avgRatio;
+            sumPercentage += ds.percentageOfOrigGraph;
         }
 
         DSCCStatistics average = new DSCCStatistics(file,algo);
@@ -56,6 +67,7 @@ public class DSCCStatistics extends Statistics {
         average.avgSCCSize = sumSize / statisticsList.size();
         average.avgNewSCCCount = sumNew / statisticsList.size();
         average.avgRatio = sumRatio / statisticsList.size();
+        average.percentageOfOrigGraph = sumPercentage / statisticsList.size();
         average.numRuns = statisticsList.size();
 
         return average;
