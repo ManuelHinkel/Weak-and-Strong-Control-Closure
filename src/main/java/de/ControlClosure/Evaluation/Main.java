@@ -7,6 +7,7 @@ import de.ControlClosure.Statistics.DSCCStatistics;
 import de.ControlClosure.Statistics.Statistics;
 import de.ControlClosure.Strong.SCCCubic;
 import de.ControlClosure.Strong.SCCDecrementalSCC;
+import de.ControlClosure.Strong.SCCOptimized;
 import de.ControlClosure.Vertex;
 import de.ControlClosure.Weak.WCCCubic;
 import de.ControlClosure.Weak.WCCDecrementalSCC;
@@ -125,7 +126,7 @@ public class Main {
                 if (weak) {
                     new WCCOptimized().measure(G,Vprime, statistics, sccStats);
                 } else {
-                    //new SCCDecrementalSCC(new TarjanDSCC()).measure(G,Vprime,P,statistics, sccStats);
+                    new SCCOptimized().measure(G,Vprime,P,statistics, sccStats);
                 }
             }
             case "polylog" -> {

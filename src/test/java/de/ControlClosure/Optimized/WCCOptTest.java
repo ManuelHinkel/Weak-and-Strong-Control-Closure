@@ -44,7 +44,7 @@ public class WCCOptTest {
             long sum = 0;
             for(int j = 0; j < rep; j++) {
                 Graph<Vertex> G = GraphGenerator.randomCFG(i,0.75, r);
-                Set<Vertex> Vp = GraphGenerator.chooseVprime(G.vertices(), 3, r);
+                Set<Vertex> Vp = GraphGenerator.chooseVprime(G.vertices(), 0.8, r);
 
                 Tuple<GraphF, Map<Vertex, Integer>> converted = GraphFUtils.convertG(G);
                 Set<Integer> VpI = GraphFUtils.convertVertexSet(Vp, converted.second);

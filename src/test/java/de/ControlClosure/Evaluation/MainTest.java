@@ -23,8 +23,8 @@ public class MainTest {
         File directory = new File("./evaluation/data_strong_dscc");
 
         for (File file : directory.listFiles()) {
-            for(String algo: new String[]{"quadratic"}) {
-                Main.main(new String[]{algo, file.getAbsolutePath(), "10", "s", "scc"});
+            for(String algo: new String[]{"optimized"}) {
+                Main.main(new String[]{algo, file.getAbsolutePath(), "1", "s", "", ""});
                 Vertex.resetID();
             }
         }
