@@ -4,7 +4,6 @@ import de.ControlClosure.*;
 import de.ControlClosure.DSCC.DecrementalSCC;
 import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
 import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
-import de.ControlClosure.Evaluation.Main;
 import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Utils.MathUtils;
 import de.ControlClosure.Utils.SetUtils;

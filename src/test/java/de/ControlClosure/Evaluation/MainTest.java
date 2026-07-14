@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+/*
+ * Tests if the output of Main has the correct format
+ */
 public class MainTest {
     @Test
     public void testWeak() {

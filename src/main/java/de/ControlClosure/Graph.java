@@ -1,7 +1,5 @@
 package de.ControlClosure;
 
-
-import de.ControlClosure.DSCC.Bernstein.Node;
 import de.ControlClosure.DataStructuresAndAlgorithms.HashList;
 
 import java.util.*;

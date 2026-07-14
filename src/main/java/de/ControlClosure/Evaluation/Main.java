@@ -18,6 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/*
+ * Runs different algorithms and outputs running times or SCC information, if applicable.
+ */
 public class Main {
     public static void main(String[] args) {
         assert false; // Test if Assertions are disabled

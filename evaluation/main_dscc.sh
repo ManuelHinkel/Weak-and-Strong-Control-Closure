@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#example ./main_dscc.sh [w | s | worst}  ['' | scc] (last flag determines runtime or scc statistics eval)
+#example ./main_dscc.sh [w | s | worst}  ['' | scc] ['' | i] (scc: only scc statistics, no runtime; i: outputs each run individually)
 
 ALGORITHM="$1"
 FLAG="$2"

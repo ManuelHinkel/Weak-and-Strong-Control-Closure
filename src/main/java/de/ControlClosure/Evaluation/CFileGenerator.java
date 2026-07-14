@@ -4,10 +4,6 @@ import de.ControlClosure.Graph;
 import de.ControlClosure.Utils.IOUtils;
 import de.ControlClosure.Vertex;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;

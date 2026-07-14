@@ -3,6 +3,9 @@ package de.ControlClosure.Optimized;
 
 import java.util.*;
 
+/*
+ * Optimized implementation of Tarjan's algorithm using arrays and array-lists instead of hashmaps.
+ */
 public class TarjanList {
     private int currentIndex = 0;
 

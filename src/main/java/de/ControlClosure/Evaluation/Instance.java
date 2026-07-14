@@ -10,7 +10,7 @@ public class Instance {
     public Set<Vertex> Vprime;
     public Set<Vertex> P;
 
-    // only used to compare with other algorithm
+    // only used to compare with Masud's algorithm
     public String name;
     public Set<Vertex> weakControlClosure;
     public Set<Vertex> strongControlClosure;

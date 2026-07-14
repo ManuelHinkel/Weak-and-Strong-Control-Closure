@@ -1,26 +1,21 @@
 package de.ControlClosure.Evaluation;
 
-import de.ControlClosure.DSCC.TarjanDSCC;
 import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
 import de.ControlClosure.Graph;
-import de.ControlClosure.Optimized.WCCOpt;
 import de.ControlClosure.Statistics.Statistics;
-import de.ControlClosure.Strong.SCCCubic;
-import de.ControlClosure.Strong.SCCDecrementalSCC;
 import de.ControlClosure.Strong.SCCOptimized;
 import de.ControlClosure.Utils.GraphUtils;
 import de.ControlClosure.Vertex;
-import de.ControlClosure.Weak.WCCCubic;
-import de.ControlClosure.Weak.WCCDecrementalSCC;
 import de.ControlClosure.Weak.WCCOptimized;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
-
+/*
+ * Runs the optimized algorithms on instances produced by Masud's algorithm
+ */
 public class ComparisonRunner {
     public static void main(String[] args) {
         assert false; // Test if Assertions are disabled

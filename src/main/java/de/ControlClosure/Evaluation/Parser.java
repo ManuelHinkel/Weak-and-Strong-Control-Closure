@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Stream;
-
+/*
+ * Given the output of Masud's algorithm, produces wcc and scc instances.
+ * Also parses instance files.
+ */
 public class Parser {
 
     public static final String V_PRIME_ID = "V'";
@@ -211,7 +214,7 @@ public class Parser {
         return new Tuple<>(V,G);
     }
 
-    // Iterates over teh results of the other algorithm and translates them to Instances
+    // Iterates over the results of Masud's algorithm and translates them to Instances
     public static void main(String[] args) {
         if (args.length != 2) {
             throw new IllegalArgumentException("Expected arguments: [result folder] [output folder]!");

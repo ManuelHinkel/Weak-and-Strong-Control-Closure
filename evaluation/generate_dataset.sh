@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#example ./generate_dataset.sh [OUT]
+
 #data_weak_all
 #data_strong_all
 #data_weak_dscc

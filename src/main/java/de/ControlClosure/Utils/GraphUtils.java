@@ -5,7 +5,6 @@ import de.ControlClosure.DataStructuresAndAlgorithms.Tarjan;
 import de.ControlClosure.Graph;
 import de.ControlClosure.SCC;
 import de.ControlClosure.DataStructuresAndAlgorithms.Tuple;
-import de.ControlClosure.Vertex;
 
 import java.util.*;
 

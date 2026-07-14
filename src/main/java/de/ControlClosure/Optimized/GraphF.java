@@ -1,9 +1,9 @@
 package de.ControlClosure.Optimized;
 
-import de.ControlClosure.Graph;
-
 import java.util.*;
-
+/*
+ * Minimal, optimized implementation of a graph.
+ */
 public class GraphF {
     public List<Integer>[] adjacencyList;
     public List<Integer>[] reversedAdjacencyList;

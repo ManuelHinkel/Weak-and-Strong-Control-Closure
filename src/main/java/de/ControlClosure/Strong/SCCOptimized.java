@@ -5,7 +5,6 @@ import de.ControlClosure.Graph;
 import de.ControlClosure.Optimized.GraphF;
 import de.ControlClosure.Optimized.GraphFUtils;
 import de.ControlClosure.Optimized.SCCOpt;
-import de.ControlClosure.Optimized.WCCOpt;
 import de.ControlClosure.Statistics.DSCCStatistics;
 import de.ControlClosure.Statistics.Statistics;
 import de.ControlClosure.Utils.GraphUtils;
@@ -16,6 +15,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/*
+ * Wrapper of the SCCOpt algorithm used in Main.java
+ */
 public class SCCOptimized implements StrongControlClosure {
     @Override
     public Set<Vertex> scc(Graph<Vertex> G, Set<Vertex> Vp, Set<Vertex> P) {

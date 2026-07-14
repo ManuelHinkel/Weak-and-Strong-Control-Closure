@@ -4,6 +4,9 @@ import de.ControlClosure.DataStructuresAndAlgorithms.Triple;
 
 import java.util.*;
 
+/*
+ * Optimized implementation of WCCDecrementalSCC using Tarjan's algorithm.
+ */
 public class WCCOpt{
 
     private static TarjanList TARJAN = new TarjanList();

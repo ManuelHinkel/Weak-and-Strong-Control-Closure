@@ -28,7 +28,7 @@ public class GraphTest {
         assertTrue(G.outgoing(v[0]).contains(v[1]));
     }
 
-    @Test // TODO: find bug
+    @Test
     public void testInduced() {
         Graph<Vertex> G = G();
         Graph<Vertex> I = G.induced(new HashSet<>(List.of(v[0],v[1],v[2])));

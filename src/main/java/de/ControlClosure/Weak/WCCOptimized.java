@@ -14,7 +14,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-// Only for Runtime Measurement of Optimized Implementation
+/*
+ * Wrapper of the WCCOpt algorithm used in Main.java
+ */
 public class WCCOptimized implements WeakControlClosure{
     @Override
     public Set<Vertex> wcc(Graph<Vertex> G, Set<Vertex> Vp) {
